@@ -28,10 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-//                .antMatchers("/news/add").hasRole(Role.getRoleName(Role.ROLE_AUTHOR))
-                .antMatchers("/news/*").authenticated()
+                .antMatchers("/booking/*").authenticated()
                 .antMatchers("/login").anonymous()
-                .antMatchers("/*").permitAll()
+                .antMatchers("/sign_up").anonymous()
+//                .antMatchers("/*").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .failureUrl("/login?error=true")
-                .defaultSuccessUrl("/news/")
+                .defaultSuccessUrl("/booking/view/washing_machines")
                 .and()
                 .logout()
                 .logoutUrl("/logout")
@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authProvider);
     }
 

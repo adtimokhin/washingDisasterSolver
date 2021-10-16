@@ -1,5 +1,8 @@
 package com.adtimokhin.util;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * @author adtimokhin
  * 16.10.2021
@@ -46,6 +49,32 @@ public class DateFormatResolver {
         if (startHour > endHour) {
             return true;
         }
-        return startHour == endHour && startMinute > startHour;
+        return startHour == endHour && startMinute > endMinute;
+    }
+
+    public boolean isTimeBigger(String timeOne, String timeTwo) {
+        return isTimeBigger(getDatePart(timeOne, HOUR),
+                getDatePart(timeOne, MINUTE),
+                getDatePart(timeTwo, HOUR),
+                getDatePart(timeTwo, MINUTE));
+    }
+
+    public String resolveTimeForToday(String hour, String minute) {
+        if (hour.length() == 1) {
+            hour = "0" + hour;
+        }
+        if (minute.length() == 1) {
+            minute = "0" + minute;
+        }
+
+        return getCurrentYearMonthDay() + " " + hour + ":" + minute;
+
+
+    }
+
+    public String getCurrentYearMonthDay() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy MM dd");
+        LocalDateTime now = LocalDateTime.now();
+        return dtf.format(now);
     }
 }

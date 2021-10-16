@@ -10,10 +10,8 @@
 <p> It may not look different from our index (or landing) page yet. But that will change pretty quick, I promise.</p>
 
 <div id="errors">
-    <#--    Double ?? means that ftl will check if that attribute is present        -->
     <#if errors??>
         <#list errors as error>
-        <#--        Remember:  error is an obkect of class UserError        -->
            <p> ${error.errorMessage} </p>
         </#list>
     </#if>

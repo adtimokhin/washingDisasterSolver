@@ -30,6 +30,7 @@ public class TimeTable {
     private Machine machine;
 
     private final static DateFormatResolver dateFormatResolver = new DateFormatResolver();
+    private final static Sorter sorter = new Sorter();
 
     @Getter
     private List<TimePeriod> timePeriods;
@@ -38,7 +39,7 @@ public class TimeTable {
 
         this.machine = machine;
 
-        List<WashingMachineBooking> washingMachineBookings = washingMachineBookingService.getBookings(machine);
+        List<WashingMachineBooking> washingMachineBookings = sorter.sortWashingMachineBooking(washingMachineBookingService.getBookings(machine));
 
         int washingMachineBookingsSize = washingMachineBookings.size();
 
@@ -74,7 +75,7 @@ public class TimeTable {
         }
     }
 
-    public void generateTimeTable(DryingMachine machine,DryingBookingMachineBookingService dryingMachineBookingService ) {
+    public void generateTimeTable(DryingMachine machine, DryingBookingMachineBookingService dryingMachineBookingService) {
         this.machine = machine;
 
         List<DryingMachineBooking> dryingMachineBookings = dryingMachineBookingService.getBookings(machine);
@@ -114,6 +115,18 @@ public class TimeTable {
     }
 
 
+    public boolean isFreeBetween(int startHour, int startMinute, int endHour, int endMinute) {
+        for (TimePeriod timePeriod : timePeriods) {
+            if (timePeriod.isFree) {
+                if (dateFormatResolver.isTimeBigger(startHour, startMinute, timePeriod.startHour, timePeriod.startMinute)) {
+                    if (dateFormatResolver.isTimeBigger(timePeriod.endHour, timePeriod.endMinute, endHour, endMinute)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     @Override
     public String toString() {
@@ -127,6 +140,7 @@ public class TimeTable {
         int startMinute;
         int endHour;
         int endMinute;
+        @Getter
         boolean isFree;
 
         public TimePeriod(int startHour, int startMinute, int endHour, int endMinute, boolean isFree) {
@@ -147,5 +161,11 @@ public class TimeTable {
                     ", isFree=" + isFree +
                     '}';
         }
+
+        public String getTimeBounds() {
+            return "Start: " + startHour + ":" + startMinute + " End: " + endHour + ":" + endMinute;
+        }
+
+
     }
 }

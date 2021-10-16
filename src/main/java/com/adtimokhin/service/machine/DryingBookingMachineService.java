@@ -13,4 +13,6 @@ import java.util.List;
 public interface DryingBookingMachineService {
 
     List<DryingMachine> findAll();
+
+    DryingMachine findById(int id);
 }

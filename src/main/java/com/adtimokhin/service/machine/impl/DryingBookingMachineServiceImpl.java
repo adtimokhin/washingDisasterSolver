@@ -1,6 +1,7 @@
 package com.adtimokhin.service.machine.impl;
 
 import com.adtimokhin.model.machine.DryingMachine;
+import com.adtimokhin.model.machine.WashingMachine;
 import com.adtimokhin.repository.machine.DryingMachineRepository;
 import com.adtimokhin.service.machine.DryingBookingMachineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,10 @@ public class DryingBookingMachineServiceImpl implements DryingBookingMachineServ
     @Override
     public List<DryingMachine> findAll() {
         return dryingMachineRepository.findAll();
+    }
+
+    @Override
+    public DryingMachine findById(int id) {
+        return dryingMachineRepository.findById(id).orElse(null);
     }
 }

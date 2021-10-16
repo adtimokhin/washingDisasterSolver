@@ -4,6 +4,7 @@ import com.adtimokhin.model.bookings.DryingMachineBooking;
 import com.adtimokhin.model.machine.DryingMachine;
 import com.adtimokhin.repository.bookings.DryingMachineBookingRepository;
 import com.adtimokhin.service.bookings.DryingBookingMachineBookingService;
+import com.adtimokhin.util.TimeTableContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,9 @@ import java.util.List;
 public class DryingBookingMachineBookingServiceImpl implements DryingBookingMachineBookingService {
 
     @Autowired
+    private TimeTableContainer timeTableContainer;
+
+    @Autowired
     private DryingMachineBookingRepository dryingMachineBookingRepository;
 
     @Override
@@ -27,5 +31,7 @@ public class DryingBookingMachineBookingServiceImpl implements DryingBookingMach
     @Override
     public void save(DryingMachineBooking booking) {
         dryingMachineBookingRepository.save(booking);
+
+        timeTableContainer.updateTimeTable(booking.getDryingMachine().getId(), false);
     }
 }
