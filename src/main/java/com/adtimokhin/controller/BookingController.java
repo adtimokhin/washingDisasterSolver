@@ -63,8 +63,13 @@ public class BookingController {
 
 
     @GetMapping("/view/washing_machines")
-    public String getAllWashingMachineData(Model model) {
+    public String getAllWashingMachineData(@RequestParam(name = "date", required = false) String date, Model model) {
         // getting information about the time when certain machines are available.
+        if(date != null) {
+            if (!dateFormatResolver.onTheSameDay(date, timeTableContainer.getDay())) {
+                timeTableContainer.changeDay(date);
+            }
+        }
         List<TimeTable> timeTables = timeTableContainer.getWashingMachineTimeTables();
 
         model.addAttribute("timeTables", timeTables);
@@ -82,7 +87,7 @@ public class BookingController {
         User user = contextProvider.getUser();
 
         List<BookingError> errors = bookingValidator.validate(machineId,
-                                    startHour, startMinute, endHour, endMinute, user, true);
+                startHour, startMinute, endHour, endMinute, user, true);
         if (errors == null) {
             WashingMachineBooking booking = new WashingMachineBooking(user,
                     washingMachineService.findById(Integer.parseInt(machineId)),

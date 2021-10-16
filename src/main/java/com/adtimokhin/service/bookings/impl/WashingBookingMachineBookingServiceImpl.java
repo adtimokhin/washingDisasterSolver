@@ -36,4 +36,9 @@ public class WashingBookingMachineBookingServiceImpl implements WashingBookingMa
 
         timeTableContainer.updateTimeTable(booking.getWashingMachine().getId(), true);
     }
+
+    @Override
+    public void delete(WashingMachineBooking booking) {
+        washingMachineBookingRepository.delete(booking);
+    }
 }

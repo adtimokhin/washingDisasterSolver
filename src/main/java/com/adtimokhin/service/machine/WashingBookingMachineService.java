@@ -15,4 +15,5 @@ public interface WashingBookingMachineService{
     List<WashingMachine> findAll();
 
     WashingMachine findById(int id);
+
 }

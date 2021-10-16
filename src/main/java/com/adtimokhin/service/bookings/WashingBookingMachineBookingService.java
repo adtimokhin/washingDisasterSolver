@@ -18,4 +18,6 @@ public interface WashingBookingMachineBookingService {
     List<WashingMachineBooking> getBookings(WashingMachine machine);
 
     void save(WashingMachineBooking booking);
+
+    void delete(WashingMachineBooking booking);
 }

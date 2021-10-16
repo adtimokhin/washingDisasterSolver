@@ -77,4 +77,31 @@ public class DateFormatResolver {
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
     }
+
+    public String today(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy MM dd HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+        return dtf.format(now);
+    }
+
+    public boolean onTheSameDay(String timeOne, String timeTwo) {
+        // for this class we assume that we use DATE_FORMAT
+        int dayOne = getDatePart(timeOne, DAY);
+        int dayTwo = getDatePart(timeTwo, DAY);
+
+        if (dayOne == dayTwo) {
+
+            int monthOne = getDatePart(timeOne, MONTH);
+            int monthTwo = getDatePart(timeTwo, MONTH);
+
+            if (monthOne == monthTwo) {
+
+                int yearOne = getDatePart(timeOne, YEAR);
+                int yearTwo = getDatePart(timeTwo, YEAR);
+
+                return yearOne == yearTwo;
+            }
+        }
+        return false;
+    }
 }

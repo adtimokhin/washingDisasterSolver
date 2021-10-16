@@ -8,9 +8,7 @@ import com.adtimokhin.model.machine.WashingMachine;
 import com.adtimokhin.service.bookings.DryingBookingMachineBookingService;
 import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,16 +28,15 @@ public class TimeTable {
     private Machine machine;
 
     private final static DateFormatResolver dateFormatResolver = new DateFormatResolver();
-    private final static Sorter sorter = new Sorter();
 
     @Getter
     private List<TimePeriod> timePeriods;
 
-    public void generateTimeTable(WashingMachine machine, WashingBookingMachineBookingService washingMachineBookingService) {
+    public void generateTimeTable(WashingMachine machine, WashingBookingMachineBookingService washingMachineBookingService, String date, Sorter sorter) {
 
         this.machine = machine;
 
-        List<WashingMachineBooking> washingMachineBookings = sorter.sortWashingMachineBooking(washingMachineBookingService.getBookings(machine));
+        List<WashingMachineBooking> washingMachineBookings = sorter.sortWashingMachineBooking(sorter.clearData(washingMachineBookingService.getBookings(machine),  date));
 
         int washingMachineBookingsSize = washingMachineBookings.size();
 

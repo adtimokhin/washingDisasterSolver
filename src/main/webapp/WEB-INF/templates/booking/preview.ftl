@@ -32,6 +32,11 @@
 
 </div>
 
+<form method="get" action="/booking/view/washing_machines">
+    <input type="text" name="date" value="2021 10 16 00:00">
+    <input type="submit">
+</form>
+
 <form method="post" action="/booking/add/washing_machine">
     <div>
         <p>

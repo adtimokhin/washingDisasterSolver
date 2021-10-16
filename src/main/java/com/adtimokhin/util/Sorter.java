@@ -1,6 +1,11 @@
 package com.adtimokhin.util;
 
 import com.adtimokhin.model.bookings.WashingMachineBooking;
+import com.adtimokhin.model.machine.WashingMachine;
+import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
+import com.adtimokhin.service.machine.WashingBookingMachineService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +15,11 @@ import java.util.List;
  * 16.10.2021
  **/
 
+@Component
 public class Sorter {
+
+    @Autowired
+    private WashingBookingMachineBookingService washingBookingMachineBookingService;
 
 
     private static final DateFormatResolver dateTimeResolver = new DateFormatResolver();
@@ -34,5 +43,18 @@ public class Sorter {
 
         return unsortedList;
 
+    }
+
+    public List<WashingMachineBooking> clearData(List<WashingMachineBooking> unclearList, String date) {
+
+        List<WashingMachineBooking> washingMachineBookings = new ArrayList<>();
+
+        for (WashingMachineBooking washingMachineBooking : unclearList) {
+            if (dateTimeResolver.onTheSameDay(date, washingMachineBooking.getStartDate())) {
+                washingMachineBookings.add(washingMachineBooking);
+            }
+        }
+
+        return washingMachineBookings;
     }
 }
