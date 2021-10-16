@@ -3,6 +3,7 @@ package com.adtimokhin.util;
 import com.adtimokhin.model.bookings.DryingMachineBooking;
 import com.adtimokhin.model.bookings.WashingMachineBooking;
 import com.adtimokhin.model.machine.DryingMachine;
+import com.adtimokhin.model.machine.Machine;
 import com.adtimokhin.model.machine.WashingMachine;
 import com.adtimokhin.service.bookings.DryingBookingMachineBookingService;
 import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
@@ -13,25 +14,29 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.adtimokhin.util.DateFormatResolver.HOUR;
+import static com.adtimokhin.util.DateFormatResolver.MINUTE;
+
 
 /**
  * @author adtimokhin
  * 16.10.2021
  **/
 
+
 public class TimeTable {
 
+    @Getter
+    private Machine machine;
 
-    @Autowired
-    private WashingBookingMachineBookingService washingMachineBookingService;
-
-    @Autowired
-    private DryingBookingMachineBookingService dryingMachineBookingService;
+    private final static DateFormatResolver dateFormatResolver = new DateFormatResolver();
 
     @Getter
     private List<TimePeriod> timePeriods;
 
-    void generateTimeTable(WashingMachine machine) {
+    public void generateTimeTable(WashingMachine machine, WashingBookingMachineBookingService washingMachineBookingService) {
+
+        this.machine = machine;
 
         List<WashingMachineBooking> washingMachineBookings = washingMachineBookingService.getBookings(machine);
 
@@ -41,9 +46,13 @@ public class TimeTable {
         for (int i = 0; i < washingMachineBookingsSize; i++) {
             WashingMachineBooking current = washingMachineBookings.get(i);
             // create TimePeriod for current Booking
-            Date startDate = current.getStartDate();
-            Date endDate = current.getEndDate();
-            timePeriods.add(new TimePeriod(startDate.getHours(), startDate.getMinutes(), endDate.getHours(), endDate.getMinutes(), false));
+            String startDate = current.getStartDate();
+            String endDate = current.getEndDate();
+            timePeriods.add(new TimePeriod(dateFormatResolver.getDatePart(startDate, HOUR),
+                    dateFormatResolver.getDatePart(startDate, MINUTE),
+                    dateFormatResolver.getDatePart(endDate, HOUR),
+                    dateFormatResolver.getDatePart(endDate, MINUTE),
+                    false));
 
             if (i == washingMachineBookingsSize - 1) {
                 continue;
@@ -51,17 +60,22 @@ public class TimeTable {
 
             WashingMachineBooking next = washingMachineBookings.get(i + 1);
             // comparing two booking dates
-            Date nextStartDate = next.getStartDate();
-            if (!datesMatch(nextStartDate, endDate)) {
+            String nextStartDate = next.getStartDate();
+            if (!dateFormatResolver.datesMatch(nextStartDate, endDate)) {
                 // create new a free slot in between
                 timePeriods.add(new TimePeriod(
-                        endDate.getHours(), endDate.getMinutes(), nextStartDate.getHours(), nextStartDate.getMinutes(), true
+                        dateFormatResolver.getDatePart(endDate, HOUR),
+                        dateFormatResolver.getDatePart(endDate, MINUTE),
+                        dateFormatResolver.getDatePart(nextStartDate, HOUR),
+                        dateFormatResolver.getDatePart(nextStartDate, MINUTE),
+                        true
                 ));
             }
         }
     }
 
-    void generateTimeTable(DryingMachine machine) {
+    public void generateTimeTable(DryingMachine machine,DryingBookingMachineBookingService dryingMachineBookingService ) {
+        this.machine = machine;
 
         List<DryingMachineBooking> dryingMachineBookings = dryingMachineBookingService.getBookings(machine);
 
@@ -71,9 +85,13 @@ public class TimeTable {
         for (int i = 0; i < washingMachineBookingsSize; i++) {
             DryingMachineBooking current = dryingMachineBookings.get(i);
             // create TimePeriod for current Booking
-            Date startDate = current.getStartDate();
-            Date endDate = current.getEndDate();
-            timePeriods.add(new TimePeriod(startDate.getHours(), startDate.getMinutes(), endDate.getHours(), endDate.getMinutes(), false));
+            String startDate = current.getStartDate();
+            String endDate = current.getEndDate();
+            timePeriods.add(new TimePeriod(dateFormatResolver.getDatePart(startDate, HOUR),
+                    dateFormatResolver.getDatePart(startDate, MINUTE),
+                    dateFormatResolver.getDatePart(endDate, HOUR),
+                    dateFormatResolver.getDatePart(endDate, MINUTE),
+                    false));
 
             if (i == washingMachineBookingsSize - 1) {
                 continue;
@@ -81,22 +99,21 @@ public class TimeTable {
 
             DryingMachineBooking next = dryingMachineBookings.get(i + 1);
             // comparing two booking dates
-            Date nextStartDate = next.getStartDate();
-            if (!datesMatch(nextStartDate, endDate)) {
+            String nextStartDate = next.getStartDate();
+            if (!dateFormatResolver.datesMatch(nextStartDate, endDate)) {
                 // create new a free slot in between
                 timePeriods.add(new TimePeriod(
-                        endDate.getHours(), endDate.getMinutes(), nextStartDate.getHours(), nextStartDate.getMinutes(), true
+                        dateFormatResolver.getDatePart(endDate, HOUR),
+                        dateFormatResolver.getDatePart(endDate, MINUTE),
+                        dateFormatResolver.getDatePart(nextStartDate, HOUR),
+                        dateFormatResolver.getDatePart(nextStartDate, MINUTE),
+                        true
                 ));
             }
         }
     }
 
-    private boolean datesMatch(Date start, Date end) {
-        if (start.getMinutes() == end.getMinutes()) {
-            return start.getHours() == end.getHours();
-        }
-        return false;
-    }
+
 
     @Override
     public String toString() {
@@ -105,7 +122,7 @@ public class TimeTable {
                 '}';
     }
 
-    private static class TimePeriod {
+    public static class TimePeriod {
         int startHour;
         int startMinute;
         int endHour;

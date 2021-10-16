@@ -7,10 +7,13 @@
 <body>
 <h1>Here are all our news:</h1>
 <div id="news">
-    <#list machines as machine>
-        <table>
-            <
-        </table>
+    <#list timeTables as timeTable>
+        <p>Washing machine number ${timeTable.getMachine().getId()}</p>
+        <ul>
+            <#list timeTable.timePeriods as periods>
+                <li>${periods.toString()}</li>
+            </#list>
+        </ul>
 
     </#list>
 

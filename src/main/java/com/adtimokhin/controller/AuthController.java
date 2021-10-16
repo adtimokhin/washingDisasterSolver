@@ -6,9 +6,12 @@ import com.adtimokhin.model.machine.WashingMachine;
 import com.adtimokhin.service.UserService;
 import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
 import com.adtimokhin.service.machine.WashingBookingMachineService;
+import com.adtimokhin.util.TimeTable;
 import com.adtimokhin.validation.UserValidator;
 import com.adtimokhin.validation.errors.UserError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.WebAttributes;
@@ -38,6 +41,7 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
+    @Qualifier("washingBookingMachineServiceImpl")
     private WashingBookingMachineService washingMachineService;
 
     @Autowired
@@ -87,19 +91,26 @@ public class AuthController {
 
     }
 
-
-    @GetMapping("/")
-    public String test() {
-
-        Date date = new Date(2021070915);
-
-
-        WashingMachineBooking booking = new WashingMachineBooking(userService.findByEmail("test"),
-                washingMachineService.findById(1), date, date);
-        washingBookingMachineBookingService.save(booking);
-
-        return "index";
-    }
+//
+//    @GetMapping("/")
+//    public String test() {
+//
+//        User user = userService.findByEmail("test");
+//        WashingMachine wm = washingMachineService.findById(1);
+//
+//        for (int i = 0; i < 10; i++) {
+//            String n =  "2021 10 16 "+ (i+ 10) + ":00";
+//            String m  = "2021 10 16 "+ (i+ 12) + ":00";
+//            washingBookingMachineBookingService.save(new WashingMachineBooking(user, wm, n,m));
+//        }
+//
+//        TimeTable timeTable = new TimeTable();
+//        timeTable.generateTimeTable(wm, washingBookingMachineBookingService);
+//
+//        System.out.println(timeTable);
+//
+//        return "index";
+//    }
 
 
 }

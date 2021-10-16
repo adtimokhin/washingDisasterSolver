@@ -13,7 +13,7 @@ import java.sql.Date;
  **/
 
 @Entity
-@Table(name = "drying_machine_bookings_table")
+@Table(name = "drying_machine_bookings_table", schema = "main_schema")
 @Data
 public class DryingMachineBooking {
 
@@ -31,11 +31,9 @@ public class DryingMachineBooking {
     private DryingMachine dryingMachine;
 
     @Column(name = "start_time")
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private String startDate;
 
     @Column(name = "end_time")
-    @Temporal(TemporalType.DATE)
-    private Date endDate;
+    private String endDate;
 
 }

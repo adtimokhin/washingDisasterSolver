@@ -14,7 +14,7 @@ import java.sql.Date;
  **/
 
 @Entity
-@Table(name = "washing_machine_bookings_table")
+@Table(name = "washing_machine_bookings_table", schema = "main_schema")
 @Data
 @NoArgsConstructor
 public class WashingMachineBooking {
@@ -33,14 +33,12 @@ public class WashingMachineBooking {
     private WashingMachine washingMachine;
 
     @Column(name = "start_time")
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private String startDate;
 
     @Column(name = "end_time")
-    @Temporal(TemporalType.DATE)
-    private Date endDate;
+    private String endDate;
 
-    public WashingMachineBooking(User user, WashingMachine washingMachine, Date startDate, Date endDate) {
+    public WashingMachineBooking(User user, WashingMachine washingMachine, String startDate, String endDate) {
         this.user = user;
         this.washingMachine = washingMachine;
         this.startDate = startDate;

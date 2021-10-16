@@ -13,9 +13,9 @@ import java.util.List;
  **/
 
 @Entity
-@Table(name = "washing_machine_table")
+@Table(name = "washing_machine_table", schema = "main_schema")
 @Getter
-public class WashingMachine {
+public class WashingMachine implements Machine{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

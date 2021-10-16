@@ -15,7 +15,7 @@ import java.util.List;
  **/
 
 @Entity
-@Table(name = "user_table")
+@Table(name = "user_table", schema = "main_schema")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,13 +25,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name")
+//    @Column(name = "name")
     private String name;
 
-    @Column(name = "email")
+//    @Column(name = "email")
     private String email;
 
-    @Column(name = "password")
+//    @Column(name = "password")
     private String password;
 
     @OneToMany(mappedBy = "user")
