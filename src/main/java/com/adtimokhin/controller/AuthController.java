@@ -1,17 +1,13 @@
 package com.adtimokhin.controller;
 
 import com.adtimokhin.model.User;
-import com.adtimokhin.model.bookings.WashingMachineBooking;
-import com.adtimokhin.model.machine.WashingMachine;
 import com.adtimokhin.service.UserService;
 import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
 import com.adtimokhin.service.machine.WashingBookingMachineService;
-import com.adtimokhin.util.TimeTable;
 import com.adtimokhin.validation.UserValidator;
 import com.adtimokhin.validation.errors.UserError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.WebAttributes;
@@ -22,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**

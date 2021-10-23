@@ -2,7 +2,11 @@ package com.adtimokhin.model.bookings;
 
 import com.adtimokhin.model.machine.DryingMachine;
 import com.adtimokhin.model.User;
+import com.adtimokhin.model.machine.WashingMachine;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -14,8 +18,10 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "drying_machine_bookings_table", schema = "main_schema")
-@Data
-public class DryingMachineBooking {
+//@NoArgsConstructor
+//@Getter
+//@Setter
+public class DryingMachineBooking implements Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +42,64 @@ public class DryingMachineBooking {
     @Column(name = "end_time")
     private String endDate;
 
+    public DryingMachineBooking(User user, DryingMachine dryingMachine, String startDate, String endDate) {
+        this.user = user;
+        this.dryingMachine = dryingMachine;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    @Override
+    public String toString() {
+        return "DryingMachineBooking{" +
+                "id=" + id +
+                ", userId=" + user.getId() +
+                ", dryingMachineId=" + dryingMachine.getId() +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                '}';
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public DryingMachine getDryingMachine() {
+        return dryingMachine;
+    }
+
+    public void setDryingMachine(DryingMachine dryingMachine) {
+        this.dryingMachine = dryingMachine;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public DryingMachineBooking() {
+    }
 }

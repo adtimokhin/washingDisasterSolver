@@ -2,6 +2,7 @@ package com.adtimokhin.service;
 
 import com.adtimokhin.model.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author adtimokhin
@@ -12,5 +13,6 @@ public interface UserService {
 
     User findByEmail(String email);
 
+    @Transactional
     void save(User user);
 }

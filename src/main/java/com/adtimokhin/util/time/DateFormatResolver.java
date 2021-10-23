@@ -1,4 +1,4 @@
-package com.adtimokhin.util;
+package com.adtimokhin.util.time;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,7 +49,7 @@ public class DateFormatResolver {
         if (startHour > endHour) {
             return true;
         }
-        return startHour == endHour && startMinute > endMinute;
+        return startHour == endHour && startMinute >= endMinute;
     }
 
     public boolean isTimeBigger(String timeOne, String timeTwo) {
@@ -59,7 +59,7 @@ public class DateFormatResolver {
                 getDatePart(timeTwo, MINUTE));
     }
 
-    public String resolveTimeForToday(String hour, String minute) {
+    public String resolveTimeForDate(String hour, String minute, String date) {
         if (hour.length() == 1) {
             hour = "0" + hour;
         }
@@ -67,18 +67,34 @@ public class DateFormatResolver {
             minute = "0" + minute;
         }
 
-        return getCurrentYearMonthDay() + " " + hour + ":" + minute;
-
-
+        return extractYearMonthDay(date) + hour + ":" + minute;
     }
 
-    public String getCurrentYearMonthDay() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy MM dd");
-        LocalDateTime now = LocalDateTime.now();
-        return dtf.format(now);
+    public String extractYearMonthDay(String date) {
+        return date.substring(0, 11);
     }
 
-    public String today(){
+    public boolean isDateBeforeAnother(String dateOne, String dateTwo) {
+        if (getDatePart(dateOne, YEAR) == getDatePart(dateTwo, YEAR)) {
+            if (getDatePart(dateOne, MONTH) == getDatePart(dateTwo, MONTH)) {
+                if (getDatePart(dateOne, DAY) == getDatePart(dateTwo, DAY)) {
+                    if (getDatePart(dateOne, HOUR) == getDatePart(dateTwo, HOUR)) {
+                        return getDatePart(dateOne, MINUTE) < getDatePart(dateTwo, MINUTE);
+                    } else {
+                        return getDatePart(dateOne, HOUR) < getDatePart(dateTwo, HOUR);
+                    }
+                } else {
+                    return getDatePart(dateOne, DAY) < getDatePart(dateTwo, DAY);
+                }
+            } else {
+                return getDatePart(dateOne, MONTH) < getDatePart(dateTwo, MONTH);
+            }
+        } else {
+            return getDatePart(dateOne, YEAR) < getDatePart(dateTwo, YEAR);
+        }
+    }
+
+    public String today() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy MM dd HH:mm");
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
@@ -104,4 +120,9 @@ public class DateFormatResolver {
         }
         return false;
     }
+
+    public boolean timeComesAfterAnother(int hourOne, int minuteTwo, String timeTwo) {
+        return false;
+    }
+
 }

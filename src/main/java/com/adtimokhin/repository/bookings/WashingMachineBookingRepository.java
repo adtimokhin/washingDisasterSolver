@@ -18,4 +18,6 @@ public interface WashingMachineBookingRepository extends JpaRepository<WashingMa
 
     List<WashingMachineBooking> findWashingMachineBookingByWashingMachineIdOrderByIdAsc(int id);
 
+    void deleteById(int id);
+
 }

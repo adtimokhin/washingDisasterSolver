@@ -1,28 +1,25 @@
 package com.adtimokhin.controller;
 
 import com.adtimokhin.model.User;
+import com.adtimokhin.model.bookings.DryingMachineBooking;
 import com.adtimokhin.model.bookings.WashingMachineBooking;
-import com.adtimokhin.model.machine.WashingMachine;
 import com.adtimokhin.security.ContextProvider;
 import com.adtimokhin.service.UserService;
+import com.adtimokhin.service.bookings.DryingBookingMachineBookingService;
 import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
 import com.adtimokhin.service.machine.DryingBookingMachineService;
 import com.adtimokhin.service.machine.WashingBookingMachineService;
-import com.adtimokhin.util.DateFormatResolver;
-import com.adtimokhin.util.TimeTable;
-import com.adtimokhin.util.TimeTableContainer;
+import com.adtimokhin.util.time.DateFormatResolver;
+import com.adtimokhin.util.time.TimeTable;
+import com.adtimokhin.util.time.TimeTableContainer;
 import com.adtimokhin.validation.BookingValidator;
 import com.adtimokhin.validation.errors.BookingError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -45,6 +42,8 @@ public class BookingController {
     @Qualifier("dryingBookingMachineServiceImpl")
     @Autowired
     private DryingBookingMachineService dryingMachineService;
+    @Autowired
+    private DryingBookingMachineBookingService dryingBookingMachineBookingService;
 
     @Autowired
     private BookingValidator bookingValidator;
@@ -61,43 +60,93 @@ public class BookingController {
 
     private final DateFormatResolver dateFormatResolver = new DateFormatResolver();
 
+    public static final String WASHING_MACHINE_TYPE = "washing_machines";
+    public static final String DRYING_MACHINE_TYPE = "drying_machines";
 
-    @GetMapping("/view/washing_machines")
-    public String getAllWashingMachineData(@RequestParam(name = "date", required = false) String date, Model model) {
+
+    @GetMapping("/view/{type}")
+    public String getAllWashingMachineData(@PathVariable(value = "type", required = false) String machineType,
+                                           @RequestParam(name = "date", required = false) String date,
+                                           @RequestParam(name = "error", required = false) String error,
+                                           Model model) {
         // getting information about the time when certain machines are available.
-        if(date != null) {
+
+//        washingBookingMachineBookingService.delete(washingBookingMachineBookingService.findById(82));
+
+        if (date != null) {
             if (!dateFormatResolver.onTheSameDay(date, timeTableContainer.getDay())) {
                 timeTableContainer.changeDay(date);
             }
+            model.addAttribute("date", date);
+        } else {
+            model.addAttribute("date", dateFormatResolver.today());
         }
-        List<TimeTable> timeTables = timeTableContainer.getWashingMachineTimeTables();
+        List<TimeTable> timeTables;
+        if (WASHING_MACHINE_TYPE.equals(machineType)) {
+            timeTables = timeTableContainer.getWashingMachineTimeTables();
+        } else if (DRYING_MACHINE_TYPE.equals(machineType)) {
+            timeTables = timeTableContainer.getDryingMachineTimeTables();
+        } else {
+            model.addAttribute("error", "Please, select type of machinery to use!");
+            return "booking/preview";
+        }
 
+        if (error != null) {
+            model.addAttribute("error", error);
+        }
+        model.addAttribute("machineType", machineType);
         model.addAttribute("timeTables", timeTables);
         return "booking/preview";
     }
 
-    @PostMapping("/add/washing_machine")
-    public String addBooking(@RequestParam(name = "machineId") String machineId,
+    @PostMapping("/add/{type}")
+    public String addBooking(@PathVariable(value = "type", required = false) String machineType,
+                             @RequestParam(name = "machineId") String machineId,
                              @RequestParam(name = "startHour") String startHour,
                              @RequestParam(name = "startMinute") String startMinute,
                              @RequestParam(name = "endHour") String endHour,
                              @RequestParam(name = "endMinute") String endMinute,
+                             @RequestParam(name = "date") String date,
                              Model model) {
 
         User user = contextProvider.getUser();
 
-        List<BookingError> errors = bookingValidator.validate(machineId,
-                startHour, startMinute, endHour, endMinute, user, true);
+        boolean isWashingMachine = true;
+        if (machineType == null) {
+            model.addAttribute("error", "You have to specify machine type!");
+            return "redirect:/booking/view/error";
+        } else if (DRYING_MACHINE_TYPE.equals(machineType)) {
+            isWashingMachine = false;
+        } else if (!WASHING_MACHINE_TYPE.equals(machineType)) {
+            model.addAttribute("error", "You have to specify machine type!");
+            return "redirect:/booking/view/error";
+        }
+
+        List<BookingError> errors = bookingValidator.validate(machineType, machineId, startHour, startMinute,
+                endHour, endMinute, dateFormatResolver.resolveTimeForDate(startHour, startMinute, date), user,
+                isWashingMachine);
+
         if (errors == null) {
-            WashingMachineBooking booking = new WashingMachineBooking(user,
-                    washingMachineService.findById(Integer.parseInt(machineId)),
-                    dateFormatResolver.resolveTimeForToday(startHour, startMinute),
-                    dateFormatResolver.resolveTimeForToday(endHour, endMinute));
-            washingBookingMachineBookingService.save(booking);
+            if (machineType.equals(WASHING_MACHINE_TYPE)) {
+                WashingMachineBooking booking = new WashingMachineBooking(user,
+                        washingMachineService.findById(Integer.parseInt(machineId)),
+                        dateFormatResolver.resolveTimeForDate(startHour, startMinute, date),
+                        dateFormatResolver.resolveTimeForDate(endHour, endMinute, date));
+                washingBookingMachineBookingService.save(booking);
+            } else {
+                DryingMachineBooking booking = new DryingMachineBooking(user,
+                        dryingMachineService.findById(Integer.parseInt(machineId)),
+                        dateFormatResolver.resolveTimeForDate(startHour, startMinute, date),
+                        dateFormatResolver.resolveTimeForDate(endHour, endMinute, date));
+                dryingBookingMachineBookingService.save(booking);
+            }
+
             return "index";
         }
-        model.addAttribute("errors", errors);
-        return "booking/preview";
+        model.addAttribute("error", errors.get(0).getMessage());
+        model.addAttribute("date", date);
+
+        return "redirect:/booking/view/" + machineType;
     }
 
 }

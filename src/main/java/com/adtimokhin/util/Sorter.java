@@ -1,9 +1,9 @@
 package com.adtimokhin.util;
 
+import com.adtimokhin.model.bookings.DryingMachineBooking;
 import com.adtimokhin.model.bookings.WashingMachineBooking;
-import com.adtimokhin.model.machine.WashingMachine;
 import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
-import com.adtimokhin.service.machine.WashingBookingMachineService;
+import com.adtimokhin.util.time.DateFormatResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -56,5 +56,40 @@ public class Sorter {
         }
 
         return washingMachineBookings;
+    }
+
+    //
+    public List<DryingMachineBooking> sortDryingMachineBookings(List<DryingMachineBooking> unsortedList) {
+        for (int i = 0; i < unsortedList.size(); i++) {
+            for (int j = 0; j < unsortedList.size() - i; j++) {
+                if (j == unsortedList.size() - i - 1) {
+                    continue;
+                }
+                DryingMachineBooking highest = unsortedList.get(j);
+                DryingMachineBooking lower = unsortedList.get(j + 1);
+
+                if (dateTimeResolver.isTimeBigger(highest.getEndDate(), lower.getEndDate())) {
+                    unsortedList.set((j + 1), highest);
+                    unsortedList.set(j, lower);
+                }
+
+            }
+        }
+
+        return unsortedList;
+
+    }
+
+    public List<DryingMachineBooking> clearDataDrying(List<DryingMachineBooking> unclearList, String date) {
+
+        List<DryingMachineBooking> dryingMachineBookings = new ArrayList<>();
+
+        for (DryingMachineBooking dryingMachineBooking : unclearList) {
+            if (dateTimeResolver.onTheSameDay(date, dryingMachineBooking.getStartDate())) {
+                dryingMachineBookings.add(dryingMachineBooking);
+            }
+        }
+
+        return dryingMachineBookings;
     }
 }

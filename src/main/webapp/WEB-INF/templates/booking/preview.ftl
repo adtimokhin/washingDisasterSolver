@@ -8,36 +8,35 @@
 <h1>Here are all our news:</h1>
 <div id="news">
 
-    <#if errors??>
-        <#list errors as e>
-            <p>${e.getMessage()}</p>
-        </#list>
+    <#if error??>
+        <p>${error}</p>
     </#if>
 
-    <#list timeTables as timeTable>
-        <p>Washing machine number ${timeTable.getMachine().getId()}</p>
-        <table>
-            <tr>
-                <#list timeTable.timePeriods as periods>
-                    <th>${periods.getTimeBounds()}</th>
-                </#list>
-            </tr>
-            <tr>
-                <#list timeTable.timePeriods as periods>
-                    <th><#if periods.isFree()> Free <#else> Occupied</#if></th>
-                </#list>
-            </tr>
-        </table>
-    </#list>
-
+    <#if timeTables??>
+        <#list timeTables as timeTable>
+            <p>${machineType} number ${timeTable.getMachine().getId()}</p>
+            <table>
+                <tr>
+                    <#list timeTable.timePeriods as periods>
+                        <th>${periods.getTimeBounds()}</th>
+                    </#list>
+                </tr>
+                <tr>
+                    <#list timeTable.timePeriods as periods>
+                        <th><#if periods.isFree()> Free <#else> Occupied</#if></th>
+                    </#list>
+                </tr>
+            </table>
+        </#list>
+    </#if>
 </div>
 
-<form method="get" action="/booking/view/washing_machines">
-    <input type="text" name="date" value="2021 10 16 00:00">
+<form method="get" action="/booking/view/${machineType}">
+    <input type="text" name="date" value="${date}">
     <input type="submit">
 </form>
 
-<form method="post" action="/booking/add/washing_machine">
+<form method="post" action="/booking/add/${machineType}">
     <div>
         <p>
             machineId
@@ -68,6 +67,7 @@
         </p>
         <input type="text" name="endMinute">
     </div>
+    <input type="hidden" name="date" value="${date}">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     <input type="submit">
 </form>
@@ -76,15 +76,6 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     <input type="submit" value="Logout">
 </form>
-
-<#--This is the new form for the role changing method-->
-
-<div>
-    <form action="/news/change-role" method="post">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-        <input type="submit" value="Become an author">
-    </form>
-</div>
 
 </body>
 </html>

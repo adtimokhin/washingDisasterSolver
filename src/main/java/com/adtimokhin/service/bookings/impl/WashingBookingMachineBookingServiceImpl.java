@@ -1,12 +1,10 @@
 package com.adtimokhin.service.bookings.impl;
 
-import com.adtimokhin.model.bookings.DryingMachineBooking;
 import com.adtimokhin.model.bookings.WashingMachineBooking;
 import com.adtimokhin.model.machine.WashingMachine;
 import com.adtimokhin.repository.bookings.WashingMachineBookingRepository;
 import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
-import com.adtimokhin.util.TimeTable;
-import com.adtimokhin.util.TimeTableContainer;
+import com.adtimokhin.util.time.TimeTableContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +37,12 @@ public class WashingBookingMachineBookingServiceImpl implements WashingBookingMa
 
     @Override
     public void delete(WashingMachineBooking booking) {
-        washingMachineBookingRepository.delete(booking);
+        washingMachineBookingRepository.deleteById(booking.getId());
+//        washingMachineBookingRepository.delete(booking);
+    }
+
+    @Override
+    public WashingMachineBooking findById(int id) {
+        return washingMachineBookingRepository.findById(id).orElse(null);
     }
 }

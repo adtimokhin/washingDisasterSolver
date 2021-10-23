@@ -16,9 +16,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_table", schema = "main_schema")
-@Getter
-@Setter
-@NoArgsConstructor
+//@Getter
+//@Setter
+//@NoArgsConstructor
 public class User {
 
     @Id
@@ -44,5 +44,56 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public User() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<DryingMachineBooking> getDryingMachineBookingList() {
+        return dryingMachineBookingList;
+    }
+
+    public void setDryingMachineBookingList(List<DryingMachineBooking> dryingMachineBookingList) {
+        this.dryingMachineBookingList = dryingMachineBookingList;
+    }
+
+    public List<WashingMachineBooking> getWashingMachineBookingsList() {
+        return washingMachineBookingsList;
+    }
+
+    public void setWashingMachineBookingsList(List<WashingMachineBooking> washingMachineBookingsList) {
+        this.washingMachineBookingsList = washingMachineBookingsList;
     }
 }

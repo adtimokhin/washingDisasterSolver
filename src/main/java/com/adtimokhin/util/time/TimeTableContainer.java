@@ -1,4 +1,4 @@
-package com.adtimokhin.util;
+package com.adtimokhin.util.time;
 
 import com.adtimokhin.model.machine.DryingMachine;
 import com.adtimokhin.model.machine.WashingMachine;
@@ -6,7 +6,7 @@ import com.adtimokhin.service.bookings.DryingBookingMachineBookingService;
 import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
 import com.adtimokhin.service.machine.DryingBookingMachineService;
 import com.adtimokhin.service.machine.WashingBookingMachineService;
-import lombok.Getter;
+import com.adtimokhin.util.Sorter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -78,7 +78,7 @@ public class TimeTableContainer {
                 return;
             }
             timeTable.generateTimeTable(washingMachine, washingBookingMachineBookingService, day, sorter);
-            washingMachineTimeTables.set(id, timeTable);
+            washingMachineTimeTables.set((id - 1), timeTable);
             return;
 
 
@@ -91,8 +91,8 @@ public class TimeTableContainer {
         if (dryingMachine == null) {
             return;
         }
-        timeTable.generateTimeTable(dryingMachine, dryingBookingMachineBookingService);
-        washingMachineTimeTables.set(id, timeTable);
+        timeTable.generateTimeTable(dryingMachine, dryingBookingMachineBookingService, day, sorter);
+        dryingMachineTimeTables.set((id - 1), timeTable);
     }
 
     public List<TimeTable> getWashingMachineTimeTables() {
@@ -113,7 +113,7 @@ public class TimeTableContainer {
         List<WashingMachine> washingMachineList = washingBookingMachineService.findAll();
         List<DryingMachine> dryingMachineList = dryingBookingMachineService.findAll();
 
-        if(day == null){
+        if (day == null) {
             day = dateFormatResolver.today();
         }
 
@@ -130,7 +130,7 @@ public class TimeTableContainer {
         for (DryingMachine dryingMachine :
                 dryingMachineList) {
             TimeTable timeTable = new TimeTable();
-            timeTable.generateTimeTable(dryingMachine, dryingBookingMachineBookingService);
+            timeTable.generateTimeTable(dryingMachine, dryingBookingMachineBookingService, day, sorter);
             dryingMachineTimeTables.add(timeTable);
         }
     }
@@ -141,7 +141,7 @@ public class TimeTableContainer {
     }
 
     public String getDay() {
-        if(day == null){
+        if (day == null) {
             day = dateFormatResolver.today();
         }
         return day;

@@ -1,19 +1,20 @@
 package com.adtimokhin.validation;
 
 import com.adtimokhin.model.User;
-import com.adtimokhin.model.machine.WashingMachine;
+import com.adtimokhin.service.machine.DryingBookingMachineService;
 import com.adtimokhin.service.machine.WashingBookingMachineService;
-import com.adtimokhin.util.DateFormatResolver;
-import com.adtimokhin.util.TimeTable;
-import com.adtimokhin.util.TimeTableContainer;
+import com.adtimokhin.util.time.DateFormatResolver;
+import com.adtimokhin.util.time.TimeTable;
+import com.adtimokhin.util.time.TimeTableContainer;
 import com.adtimokhin.validation.errors.BookingError;
-import com.adtimokhin.validation.errors.UserError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.adtimokhin.controller.BookingController.DRYING_MACHINE_TYPE;
+import static com.adtimokhin.controller.BookingController.WASHING_MACHINE_TYPE;
 
 /**
  * @author adtimokhin
@@ -27,11 +28,14 @@ public class BookingValidator {
     private WashingBookingMachineService washingBookingMachineService;
 
     @Autowired
+    private DryingBookingMachineService dryingBookingMachineService;
+
+    @Autowired
     private TimeTableContainer timeTableContainer;
 
     private static final DateFormatResolver dateFormatResolver = new DateFormatResolver();
 
-    public List<BookingError> validate(String machineId, String startHour, String startMinute, String endHour, String endMinute, User user, boolean isWashingMachine) {
+    public List<BookingError> validate(String machineType, String machineId, String startHour, String startMinute, String endHour, String endMinute, String date,User user, boolean isWashingMachine) {
         List<BookingError> errors = new ArrayList<>();
         try {
             int machineIdInt = Integer.parseInt(machineId);
@@ -40,13 +44,34 @@ public class BookingValidator {
             int endHourInt = Integer.parseInt(endHour);
             int endMinuteInt = Integer.parseInt(endMinute);
 
-            if (washingBookingMachineService.findById(machineIdInt) == null) {
-                errors.add(new BookingError("No such machine is found."));
+            if(date == null){
+                errors.add(new BookingError("Date is not provided"));
                 return errors;
             }
 
+            if(machineType.equals(WASHING_MACHINE_TYPE)){
+                if (washingBookingMachineService.findById(machineIdInt) == null) {
+                    errors.add(new BookingError("No such machine is found."));
+                    return errors;
+                }
+            }else if(machineType.equals(DRYING_MACHINE_TYPE)){
+                if (dryingBookingMachineService.findById(machineIdInt) == null) {
+                    errors.add(new BookingError("No such machine is found."));
+                    return errors;
+                }
+            }else {
+                errors.add(new BookingError("You have to choose a valid machine type!"));
+                return errors;
+            }
+
+
             if (dateFormatResolver.isTimeBigger(startHourInt, startMinuteInt, endHourInt, endMinuteInt)){
-                errors.add(new BookingError("Starting time comes before than finishing time."));
+                errors.add(new BookingError("Starting time should come before the finishing time."));
+                return errors;
+            }
+
+            if(dateFormatResolver.isDateBeforeAnother(date, dateFormatResolver.today())){
+                errors.add(new BookingError("Booking is made for time that had already passed!"));
                 return errors;
             }
 
