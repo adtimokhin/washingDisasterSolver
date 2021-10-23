@@ -67,7 +67,7 @@
         </p>
         <input type="text" name="endMinute">
     </div>
-    <input type="hidden" name="date" value="${date}">
+    <input type="hidden" name="date" value="${date}" >
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     <input type="submit">
 </form>

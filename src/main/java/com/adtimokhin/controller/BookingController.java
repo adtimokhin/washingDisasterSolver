@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.adtimokhin.util.time.DateFormatResolver.MINUTES_BEFORE_CANCEL;
+
 
 /**
  * @author adtimokhin
@@ -147,6 +149,40 @@ public class BookingController {
         model.addAttribute("date", date);
 
         return "redirect:/booking/view/" + machineType;
+    }
+
+
+    @PostMapping("/cancel/{type}")
+    public String cancelBooking(@PathVariable(value = "type", required = false) String machineType,
+                                @RequestParam(name = "id") int id, Model model) {
+
+        if (machineType == null) {
+            model.addAttribute("msg", "You have to specify machine type!");
+            return "redirect:/account/";
+        } else if (DRYING_MACHINE_TYPE.equals(machineType)) {
+            DryingMachineBooking booking = dryingBookingMachineBookingService.findById(id);
+            if (booking != null) {
+                if (dateFormatResolver.areFarEnoughInTime(booking.getStartDate(), dateFormatResolver.today(), MINUTES_BEFORE_CANCEL)) {
+                    dryingBookingMachineBookingService.delete(booking);
+                    model.addAttribute("msg", "Cancellation was successful!");
+                    return "redirect:/account/";
+                }
+            }
+        } else if (WASHING_MACHINE_TYPE.equals(machineType)) {
+            WashingMachineBooking booking = washingBookingMachineBookingService.findById(id);
+            if (booking != null) {
+                if (dateFormatResolver.areFarEnoughInTime(booking.getStartDate(), dateFormatResolver.today(), MINUTES_BEFORE_CANCEL)) {
+                    washingBookingMachineBookingService.delete(booking);
+                    model.addAttribute("msg", "Cancellation was successful!");
+                    return "redirect:/account/";
+                }
+            }
+        }
+
+        model.addAttribute("msg", "Could not cancel. You have to cancel " + MINUTES_BEFORE_CANCEL + " minutes before your booking time");
+        return "redirect:/account/";
+
+
     }
 
 }

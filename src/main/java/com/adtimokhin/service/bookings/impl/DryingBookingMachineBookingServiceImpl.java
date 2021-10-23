@@ -1,5 +1,6 @@
 package com.adtimokhin.service.bookings.impl;
 
+import com.adtimokhin.model.User;
 import com.adtimokhin.model.bookings.DryingMachineBooking;
 import com.adtimokhin.model.machine.DryingMachine;
 import com.adtimokhin.repository.bookings.DryingMachineBookingRepository;
@@ -39,4 +40,15 @@ public class DryingBookingMachineBookingServiceImpl implements DryingBookingMach
     public void delete(DryingMachineBooking booking) {
         dryingMachineBookingRepository.delete(booking);
     }
+
+    @Override
+    public List<DryingMachineBooking> findAllByUser(User user) {
+        return dryingMachineBookingRepository.findAllByUserIdOrderByIdAsc(user.getId());
+    }
+
+    @Override
+    public DryingMachineBooking findById(int id) {
+        return dryingMachineBookingRepository.findById(id).orElse(null);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.adtimokhin.repository.bookings;
 
+import com.adtimokhin.model.User;
 import com.adtimokhin.model.bookings.DryingMachineBooking;
 import com.adtimokhin.model.bookings.WashingMachineBooking;
 import com.adtimokhin.model.machine.DryingMachine;
@@ -18,6 +19,6 @@ public interface WashingMachineBookingRepository extends JpaRepository<WashingMa
 
     List<WashingMachineBooking> findWashingMachineBookingByWashingMachineIdOrderByIdAsc(int id);
 
-    void deleteById(int id);
+    List<WashingMachineBooking> findAllByUserIdOrderByIdAsc(int userId);
 
 }

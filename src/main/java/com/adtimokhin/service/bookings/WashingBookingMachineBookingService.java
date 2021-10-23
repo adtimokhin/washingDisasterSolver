@@ -1,5 +1,6 @@
 package com.adtimokhin.service.bookings;
 
+import com.adtimokhin.model.User;
 import com.adtimokhin.model.bookings.WashingMachineBooking;
 import com.adtimokhin.model.machine.WashingMachine;
 import org.springframework.stereotype.Service;
@@ -23,4 +24,7 @@ public interface WashingBookingMachineBookingService {
     void delete(WashingMachineBooking booking);
 
     WashingMachineBooking findById(int id);
+
+    List<WashingMachineBooking> findAllByUser(User user);
+
 }

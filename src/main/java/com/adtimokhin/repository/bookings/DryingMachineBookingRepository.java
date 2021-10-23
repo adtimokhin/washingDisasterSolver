@@ -17,5 +17,7 @@ public interface DryingMachineBookingRepository extends JpaRepository<DryingMach
 
     List<DryingMachineBooking> findDryingMachineBookingsByDryingMachineIdOrderByIdAsc(int id);
 
+    List<DryingMachineBooking> findAllByUserIdOrderByIdAsc(int userId);
+
 
 }

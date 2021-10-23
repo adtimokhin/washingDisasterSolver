@@ -6,4 +6,6 @@ package com.adtimokhin.model.bookings;
  **/
 
 public interface Booking {
+
+    String presentNicely();
 }

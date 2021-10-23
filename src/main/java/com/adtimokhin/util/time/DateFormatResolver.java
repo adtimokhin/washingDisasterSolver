@@ -18,6 +18,9 @@ public class DateFormatResolver {
     public static final int HOUR = 3;
     public static final int MINUTE = 4;
 
+    public static final long MINUTES_BEFORE_CANCEL = 60 * 2; // 2 hours, but in minutes.
+    public static final long MAX_LENGTH_FOR_BOOKING = 60 * 2; // 2 hours, but in minutes.
+
 
     public int getDatePart(String date, int part) {
         String[] parts = date.split(" ");
@@ -123,6 +126,49 @@ public class DateFormatResolver {
 
     public boolean timeComesAfterAnother(int hourOne, int minuteTwo, String timeTwo) {
         return false;
+    }
+
+    public boolean areFarEnoughInTime(String dateOne, String dateTwo, long distance) {
+        int minuteDifference = 0;
+
+        // comparing years
+        int yearDate = getDatePart(dateOne, YEAR);
+        int yearToday = getDatePart(dateTwo, YEAR);
+        minuteDifference += (yearDate - yearToday) * 365 * 24 * 60;
+        if(minuteDifference >= MINUTES_BEFORE_CANCEL){
+            return true;
+        }
+
+        //comparing months
+        int monthDate = getDatePart(dateOne, MONTH);
+        int monthToday = getDatePart(dateTwo, MONTH);
+        minuteDifference += (monthDate - monthToday) * 30 * 24 * 60;
+        if(minuteDifference >= distance){
+            return true;
+        }
+
+        //comparing days
+        int dayDate = getDatePart(dateOne, DAY);
+        int dayToday = getDatePart(dateTwo, DAY);
+        minuteDifference += (dayDate - dayToday) * 24 * 60;
+        if(minuteDifference >= distance){
+            return true;
+        }
+
+        //comparing hours
+        int hourDate = getDatePart(dateOne, HOUR);
+        int hourToday = getDatePart(dateTwo, HOUR);
+        minuteDifference += (hourDate - hourToday) * 60;
+        if(minuteDifference >= distance){
+            return true;
+        }
+
+        //comparing minutes
+        int minuteDate =getDatePart(dateOne, MINUTE);
+        int minuteToday = getDatePart(dateTwo , MINUTE);
+        minuteDifference += (minuteDate - minuteToday);
+
+        return minuteDifference >= distance;
     }
 
 }

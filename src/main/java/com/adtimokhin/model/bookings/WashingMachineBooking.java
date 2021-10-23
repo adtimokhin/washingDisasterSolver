@@ -101,4 +101,10 @@ public class WashingMachineBooking implements Booking {
 
     public WashingMachineBooking() {
     }
+
+    @Override
+    public String presentNicely() {
+        return "Booking for a washing machine with id " + washingMachine.getId() + " made to start from " + startDate + " and finish at " + endDate;
+
+    }
 }
