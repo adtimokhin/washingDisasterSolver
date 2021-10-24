@@ -192,7 +192,7 @@ public class TimeTable {
         }
 
         public String getTimeBounds() {
-            return "Start: " + startHour + ":" + startMinute + " End: " + endHour + ":" + endMinute;
+            return startHour + ":" + startMinute + " -- " + endHour + ":" + endMinute;
         }
 
         public String getDate() {

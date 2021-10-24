@@ -28,7 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/booking/*").authenticated()
+                .antMatchers("/booking/**").authenticated()
+                .antMatchers("/account/**").authenticated()
+                .antMatchers("/complaint/**").authenticated()
                 .antMatchers("/login").anonymous()
                 .antMatchers("/sign_up").anonymous()
                 .antMatchers("/*").permitAll()
@@ -39,14 +41,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .failureUrl("/login?error=true")
-                .defaultSuccessUrl("/booking/view/washing_machines")
+                .defaultSuccessUrl("/booking/actions")
                 .and()
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/news/");
+                .accessDeniedPage("/");
     }
 
     @Bean

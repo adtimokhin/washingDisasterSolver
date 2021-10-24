@@ -66,6 +66,12 @@ public class BookingController {
     public static final String DRYING_MACHINE_TYPE = "drying_machines";
 
 
+    @GetMapping("/actions")
+    public String selectAction(){
+        return "booking/actions";
+    }
+
+
     @GetMapping("/view/{type}")
     public String getAllWashingMachineData(@PathVariable(value = "type", required = false) String machineType,
                                            @RequestParam(name = "date", required = false) String date,

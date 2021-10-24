@@ -90,20 +90,20 @@
     <div class="row">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 col-xs-3"></div>
-                <div class="col-md-4 col-xs-6">
+                <div class="col-lg-4 col-0"></div>
+                <div class="col-lg-4 col-12">
                     <a href="/login" class="button mx-auto d-block" style="">Login</a>
                 </div>
-                <div class="col-md-4 col-xs-3"></div>
+                <div class="col-lg-4 col-0"></div>
             </div>
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-md-4 col-xs-3"></div>
-                <div class="col-md-4 col-xs-6">
+                <div class="col-lg-4 col-0"></div>
+                <div class="col-lg-4 col-12">
                     <a href="/sign_up" class="button mx-auto d-block" style="">Sign up</a>
                 </div>
-                <div class="col-md-4 col-xs-3"></div>
+                <div class="col-lg-4 col-0"></div>
             </div>
         </div>
     </div>

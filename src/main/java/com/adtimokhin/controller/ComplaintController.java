@@ -48,9 +48,9 @@ public class ComplaintController {
     private final DateFormatResolver dateFormatResolver = new DateFormatResolver();
 
     @PostMapping("/add")
-    public String addComplaintProcess(@RequestParam(name = "isWashingMachine") String isWashingMachine,
+    public String addComplaintProcess(@RequestParam(name = "type") String type,
                                       @RequestParam(name ="id") int id, Model model){
-        if (isWashingMachine.equals("yes")){
+        if (type.equals("W")){
             WashingMachineBooking booking = washingBookingMachineBookingService.getBookingForMachineWithId(id, dateFormatResolver.today());
             if(booking == null){
                 // todo: Объявить отправившего жалобу лгуном.
@@ -66,7 +66,7 @@ public class ComplaintController {
             washingMachineComplaintService.save(complaint);
 
         }
-        else if(isWashingMachine.equals("no")){
+        else if(type.equals("D")){
             DryingMachineBooking booking= dryingBookingMachineBookingService.getBookingForMachineWithId(id, dateFormatResolver.today());
             if(booking == null){
                 // todo: Объявить отправившего жалобу лгуном.
@@ -78,10 +78,9 @@ public class ComplaintController {
             User user = contextProvider.getUser();
             DryingMachineComplaint complaint = new DryingMachineComplaint(user, booking);
 
-
             dryingMachineComplaintService.save(complaint);
         }
-        return "index";
+        return "index"; // todo: add redirect success pages
     }
 
     @GetMapping("/")

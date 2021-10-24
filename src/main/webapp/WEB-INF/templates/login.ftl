@@ -13,11 +13,14 @@
 <body style="background: rgb(214, 217, 208);">
 
 
-<#if error??>
-    <p>${error}</p>
-</#if>
-
 <div class="container main-context">
+    <#if error??>
+        <div class="row">
+            <div class="col-12">
+                <h4 class="error-msg">${error}</h4>
+            </div>
+        </div>
+    </#if>
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
@@ -35,13 +38,15 @@
                         <input type="password" name="password" class="mx-auto d-block">
                     </div>
                     <div class="input-holder">
-                        <input type="submit" value="Login" class="mx-auto d-block button">
+                        <div class="popup">
+                            <input type="submit" value="Login" class="mx-auto d-block button">
+                        </div>
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                 </form>
             </div>
         </div>
-        </div>
+    </div>
     <div class="col-2"></div>
 </div>
 
