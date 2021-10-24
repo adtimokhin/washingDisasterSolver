@@ -27,4 +27,6 @@ public interface DryingBookingMachineBookingService {
 
     DryingMachineBooking findById(int id);
 
+    DryingMachineBooking getBookingForMachineWithId(int id, String date);
+
 }

@@ -1,5 +1,6 @@
 package com.adtimokhin.model.bookings;
 
+import com.adtimokhin.model.complaints.DryingMachineComplaint;
 import com.adtimokhin.model.machine.DryingMachine;
 import com.adtimokhin.model.User;
 import com.adtimokhin.model.machine.WashingMachine;
@@ -10,6 +11,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 /**
  * @author adtimokhin
@@ -31,7 +33,6 @@ public class DryingMachineBooking implements Booking {
     @JoinColumn(name = "user_id")
     private User user;
 
-
     @ManyToOne
     @JoinColumn(name = "drying_machine_id")
     private DryingMachine dryingMachine;
@@ -41,6 +42,11 @@ public class DryingMachineBooking implements Booking {
 
     @Column(name = "end_time")
     private String endDate;
+
+    @OneToMany(mappedBy = "booking")
+    @Getter
+    @Setter
+    private List<DryingMachineComplaint> complaintList;
 
     public DryingMachineBooking(User user, DryingMachine dryingMachine, String startDate, String endDate) {
         this.user = user;

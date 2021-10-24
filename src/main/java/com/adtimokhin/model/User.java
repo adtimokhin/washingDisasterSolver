@@ -2,8 +2,9 @@ package com.adtimokhin.model;
 
 import com.adtimokhin.model.bookings.DryingMachineBooking;
 import com.adtimokhin.model.bookings.WashingMachineBooking;
+import com.adtimokhin.model.complaints.DryingMachineComplaint;
+import com.adtimokhin.model.complaints.WashingMachineComplaint;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -39,6 +40,17 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<WashingMachineBooking> washingMachineBookingsList;
+
+    @OneToMany(mappedBy = "reportingUser" , targetEntity = WashingMachineComplaint.class)
+    @Setter
+    @Getter
+    private List<WashingMachineComplaint> reportingWashingMachineComplaints;
+
+    @OneToMany(mappedBy = "reportingUser" , targetEntity = DryingMachineComplaint.class)
+    @Setter
+    @Getter
+    private List<DryingMachineComplaint> reportingDryingMachineComplaints;
+
 
     public User(String name, String email, String password) {
         this.name = name;

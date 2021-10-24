@@ -5,6 +5,9 @@ import com.adtimokhin.model.bookings.WashingMachineBooking;
 import com.adtimokhin.model.machine.WashingMachine;
 import com.adtimokhin.repository.bookings.WashingMachineBookingRepository;
 import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
+import com.adtimokhin.service.machine.WashingBookingMachineService;
+import com.adtimokhin.util.Sorter;
+import com.adtimokhin.util.time.DateFormatResolver;
 import com.adtimokhin.util.time.TimeTableContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,6 +26,11 @@ public class WashingBookingMachineBookingServiceImpl implements WashingBookingMa
 
     @Autowired
     private WashingMachineBookingRepository washingMachineBookingRepository;
+
+    @Autowired
+    private WashingBookingMachineService washingBookingMachineService;
+
+    private final DateFormatResolver dateFormatResolver = new DateFormatResolver();
 
     @Override
     public List<WashingMachineBooking> getBookings(WashingMachine machine) {
@@ -50,5 +58,34 @@ public class WashingBookingMachineBookingServiceImpl implements WashingBookingMa
     public List<WashingMachineBooking> findAllByUser(User user) {
         return washingMachineBookingRepository.findAllByUserIdOrderByIdAsc(user.getId());
     }
+
+    @Override
+    public WashingMachineBooking getBookingForMachineWithId(int id, String date) {
+        Sorter sorter = new Sorter();
+        List<WashingMachineBooking> bookings = sorter.sortWashingMachineBooking(sorter.clearData(washingBookingMachineService.findById(id).getWashingMachineBookingList(), date));
+        WashingMachineBooking previousWashingMachineBooking = null;
+        WashingMachineBooking currentMachineBooking = null;
+        for (WashingMachineBooking booking :
+                bookings) {
+            if (dateFormatResolver.isTimeBigger(date , booking.getStartDate())){
+                if(dateFormatResolver.isTimeBigger(booking.getEndDate(), date)){
+                   currentMachineBooking = booking;
+                   break;
+                }
+            }
+
+            previousWashingMachineBooking = booking;
+        }
+
+       if(currentMachineBooking == null){
+           return null;
+       }
+       if(previousWashingMachineBooking == null){
+           // todo: this is the place for the improvement.
+           return null;
+       }
+       return previousWashingMachineBooking;
+    }
+
 
 }

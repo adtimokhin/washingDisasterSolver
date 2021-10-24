@@ -1,14 +1,13 @@
 package com.adtimokhin.model.bookings;
 
 import com.adtimokhin.model.User;
+import com.adtimokhin.model.complaints.WashingMachineComplaint;
 import com.adtimokhin.model.machine.WashingMachine;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.List;
 
 /**
  * @author adtimokhin
@@ -40,6 +39,11 @@ public class WashingMachineBooking implements Booking {
 
     @Column(name = "end_time")
     private String endDate;
+
+    @OneToMany(mappedBy = "booking")
+    @Getter
+    @Setter
+    private List<WashingMachineComplaint> washingMachineComplaints;
 
     public WashingMachineBooking(User user, WashingMachine washingMachine, String startDate, String endDate) {
         this.user = user;

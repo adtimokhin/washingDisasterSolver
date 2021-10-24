@@ -14,8 +14,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "drying_machine_table", schema = "main_schema")
-//@Getter
-//@Setter
+@Getter
+@Setter
 public class DryingMachine implements Machine {
 
     @Id

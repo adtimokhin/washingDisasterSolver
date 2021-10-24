@@ -27,4 +27,6 @@ public interface WashingBookingMachineBookingService {
 
     List<WashingMachineBooking> findAllByUser(User user);
 
+    WashingMachineBooking getBookingForMachineWithId(int id, String date);
+
 }
