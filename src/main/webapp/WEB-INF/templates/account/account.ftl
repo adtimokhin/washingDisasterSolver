@@ -20,6 +20,18 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-0"></div>
+                <div class="col-lg-4 col-12">
+                    <a href="/booking/actions" class="button mx-auto d-block" style="">Return</a>
+                </div>
+                <div class="col-lg-4 col-0"></div>
+            </div>
+        </div>
+    </div>
+
     <#if msg??>
         <div class="row">
             <div class="col-12">

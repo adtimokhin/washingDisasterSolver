@@ -6,6 +6,8 @@ import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
 import com.adtimokhin.service.machine.WashingBookingMachineService;
 import com.adtimokhin.validation.UserValidator;
 import com.adtimokhin.validation.errors.UserError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.LockedException;
@@ -87,7 +89,8 @@ public class AuthController {
 
 
     @GetMapping("/")
-    public String index(){return "index";}
+    public String index(){
+        return "index";}
 
 
 

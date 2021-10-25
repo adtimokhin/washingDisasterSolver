@@ -1,5 +1,6 @@
 package com.adtimokhin.service.bookings;
 
+import com.adtimokhin.aspect.NotEmptyArguments;
 import com.adtimokhin.model.User;
 import com.adtimokhin.model.bookings.DryingMachineBooking;
 import com.adtimokhin.model.machine.DryingMachine;
@@ -15,14 +16,18 @@ import java.util.List;
 @Service
 public interface DryingBookingMachineBookingService {
 
+    @NotEmptyArguments
     List<DryingMachineBooking> getBookings(DryingMachine machine);
 
     @Transactional
+    @NotEmptyArguments
     void save(DryingMachineBooking booking);
 
     @Transactional
+    @NotEmptyArguments
     void delete(DryingMachineBooking booking);
 
+    @NotEmptyArguments
     List<DryingMachineBooking> findAllByUser(User user);
 
     List<DryingMachineBooking> findAllByDryingMachineId(int id);

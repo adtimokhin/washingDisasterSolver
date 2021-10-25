@@ -1,5 +1,6 @@
 package com.adtimokhin.service.complaints.impl;
 
+import com.adtimokhin.aspect.NotEmptyArguments;
 import com.adtimokhin.model.complaints.DryingMachineComplaint;
 import com.adtimokhin.repository.complaints.DryingMachineComplaintRepository;
 import com.adtimokhin.service.complaints.DryingMachineComplaintService;
@@ -27,5 +28,10 @@ public class DryingMachineComplaintServiceImpl implements DryingMachineComplaint
     @Override
     public List<DryingMachineComplaint> findAll() {
         return dryingMachineComplaintRepository.findAll();
+    }
+
+    @Override
+    public void deleteAll() {
+        dryingMachineComplaintRepository.deleteAll();
     }
 }

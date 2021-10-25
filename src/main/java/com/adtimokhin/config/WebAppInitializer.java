@@ -28,12 +28,10 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         return new String[]{"/"};
     }
 
-//    @Override
-//    protected FrameworkServlet createDispatcherServlet(WebApplicationContext servletAppContext) {
-//        DispatcherServlet dispatcherServlet = (DispatcherServlet) super.createDispatcherServlet(servletAppContext);
-//
-//        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
-//
-//        return dispatcherServlet;
-//    }
+    @Override
+    protected FrameworkServlet createDispatcherServlet(WebApplicationContext servletAppContext) {
+        DispatcherServlet dispatcherServlet = (DispatcherServlet) super.createDispatcherServlet(servletAppContext);
+        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+        return dispatcherServlet;
+    }
 }

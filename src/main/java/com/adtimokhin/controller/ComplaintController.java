@@ -49,7 +49,15 @@ public class ComplaintController {
 
     @PostMapping("/add")
     public String addComplaintProcess(@RequestParam(name = "type") String type,
-                                      @RequestParam(name = "id") int id, Model model) {
+                                      @RequestParam(name = "id") String idString, Model model) {
+
+        int id = -1;
+        try{
+            id = Integer.parseInt(idString);
+        }catch (Exception e){
+            model.addAttribute("msg" , "id should be entered as an number!");
+            return "complaints/complaint";
+        }
         if(id < 0 || id > 10){ // todo: we need to calculate this max. value somehow else for the flexibility sake. But we won't do that right now.
             model.addAttribute("msg" , "id in wrong range.");
             return "complaints/complaint";

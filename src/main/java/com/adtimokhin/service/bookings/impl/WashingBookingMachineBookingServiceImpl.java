@@ -1,5 +1,6 @@
 package com.adtimokhin.service.bookings.impl;
 
+import com.adtimokhin.aspect.NotEmptyArguments;
 import com.adtimokhin.model.User;
 import com.adtimokhin.model.bookings.WashingMachineBooking;
 import com.adtimokhin.model.machine.WashingMachine;
@@ -71,7 +72,7 @@ public class WashingBookingMachineBookingServiceImpl implements WashingBookingMa
     public WashingMachineBooking getBookingForMachineWithId(int id, String date) {
         Sorter sorter = new Sorter();
         List<WashingMachineBooking> bookings = findAllByWashingMachineId(id);
-        if(bookings == null){
+        if (bookings == null) {
             return null;
         }
         bookings = sorter.sortWashingMachineBooking(sorter.clearData(bookings, date));
@@ -79,24 +80,24 @@ public class WashingBookingMachineBookingServiceImpl implements WashingBookingMa
         WashingMachineBooking currentMachineBooking = null;
         for (WashingMachineBooking booking :
                 bookings) {
-            if (dateFormatResolver.isTimeBigger(date , booking.getStartDate())){
-                if(dateFormatResolver.isTimeBigger(booking.getEndDate(), date)){
-                   currentMachineBooking = booking;
-                   break;
+            if (dateFormatResolver.isTimeBigger(date, booking.getStartDate())) {
+                if (dateFormatResolver.isTimeBigger(booking.getEndDate(), date)) {
+                    currentMachineBooking = booking;
+                    break;
                 }
             }
 
             previousWashingMachineBooking = booking;
         }
 
-       if(currentMachineBooking == null){
-           return null;
-       }
-       if(previousWashingMachineBooking == null){
-           // todo: this is the place for the improvement.
-           return null;
-       }
-       return previousWashingMachineBooking;
+        if (currentMachineBooking == null) {
+            return null;
+        }
+        if (previousWashingMachineBooking == null) {
+            // todo: this is the place for the improvement.
+            return null;
+        }
+        return previousWashingMachineBooking;
     }
 
 

@@ -12,6 +12,19 @@
 </head>
 <body style="background: rgb(214, 217, 208);">
 <div class="container main-context">
+
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-0"></div>
+                <div class="col-lg-4 col-12">
+                    <a href="/booking/actions" class="button mx-auto d-block" style="">Return</a>
+                </div>
+                <div class="col-lg-4 col-0"></div>
+            </div>
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
@@ -22,7 +35,7 @@
                     </div>
                     <div class="input-holder">
                         <p class="mx-auto d-block">Machine Id<br/></p>
-                        <input type="number" name="id" class="mx-auto d-block">
+                        <input type="text" name="id" class="mx-auto d-block">
                     </div>
                     <div class="input-holder">
                         <p class="mx-auto d-block">What type of machine seems to cause problem?</p>

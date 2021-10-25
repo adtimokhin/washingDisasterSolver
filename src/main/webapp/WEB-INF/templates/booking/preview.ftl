@@ -15,6 +15,18 @@
 
 <div class="container main-context">
 
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-0"></div>
+                <div class="col-lg-4 col-12">
+                    <a href="/booking/actions" class="button mx-auto d-block" style="">Return</a>
+                </div>
+                <div class="col-lg-4 col-0"></div>
+            </div>
+        </div>
+    </div>
+
     <#if timeTables??>
         <div class="row">
             <div class="col-2"></div>
