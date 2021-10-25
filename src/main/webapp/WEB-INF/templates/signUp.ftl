@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-12">
                 <#list errors as error>
-                    <h4 class="error-msg">${error.errorMessage}</h4>
+                    <h4 class="error-msg">${error.getMessage()}</h4>
                 </#list>
             </div>
         </div>

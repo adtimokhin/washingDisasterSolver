@@ -24,28 +24,34 @@ public class UserValidator {
     @Autowired
     private UserService userService;
 
-    public List<UserError> validate(User user, String passwordTwo){
+    public List<UserError> validate(User user, String passwordTwo) {
         ArrayList<UserError> errors = new ArrayList<>(); // we will add UserErrors to this List.
 
         //check one - password is at least 7 characters long
-        if (user.getPassword().length() < MIN_PASSWORD_LENGTH){
-            errors.add(new UserError("Password should be at least " + MIN_PASSWORD_LENGTH + " characters long."));
+        if (user.getPassword().equals("")) {
+            errors.add(new UserError("Your password field is empty."));
+        } else {
+            if (user.getPassword().length() < MIN_PASSWORD_LENGTH) {
+                errors.add(new UserError("Password should be at least " + MIN_PASSWORD_LENGTH + " characters long."));
+            } else if (!user.getPassword().equals(passwordTwo)) {
+                errors.add(new UserError("Passwords do not match."));
+            }
         }
-
         //check two - email is in correct format
-        if (!isEmailInCorrectFormat(user.getEmail())){
-            errors.add(new UserError("email is in invalid form."));
-        }else {
+        if (!isEmailInCorrectFormat(user.getEmail())) {
+            errors.add(new UserError("Email is in invalid form."));
+        } else {
             // check three - email is not yet in use
-            if(userService.findByEmail(user.getEmail()) != null){
+            if (userService.findByEmail(user.getEmail()) != null) {
                 errors.add(new UserError("This email is already in use."));
             }
         }
-        //check four - see if the two passwords match
-        if(!user.getPassword().equals(passwordTwo)){
-            errors.add(new UserError("Passwords do not match."));
-        }
 
+        if(user.getName().equals("")){
+            errors.add(new UserError("You should enter your name."));
+        }else if(user.getName().split(" ").length != 2){
+            errors.add(new UserError("You should enter your name and surname."));
+        }
 
         return errors;
     }
@@ -53,9 +59,7 @@ public class UserValidator {
     private static final String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
     private static Pattern emailPattern = Pattern.compile(emailRegex);
 
-    // this variation of the method
-    // has a more complex requirements for email that we have defined in the example above
-    private boolean isEmailInCorrectFormat(String email){
+    private boolean isEmailInCorrectFormat(String email) {
         Matcher matcher = emailPattern.matcher(email);
         return matcher.matches();
 

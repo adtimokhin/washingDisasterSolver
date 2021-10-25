@@ -46,7 +46,10 @@ public class WashingBookingMachineBookingServiceImpl implements WashingBookingMa
 
     @Override
     public void delete(WashingMachineBooking booking) {
+        int id = booking.getWashingMachine().getId();
         washingMachineBookingRepository.delete(booking);
+
+        timeTableContainer.updateTimeTable(id, true);
     }
 
     @Override
@@ -60,9 +63,18 @@ public class WashingBookingMachineBookingServiceImpl implements WashingBookingMa
     }
 
     @Override
+    public List<WashingMachineBooking> findAllByWashingMachineId(int id) {
+        return washingMachineBookingRepository.findAllByWashingMachineId(id);
+    }
+
+    @Override
     public WashingMachineBooking getBookingForMachineWithId(int id, String date) {
         Sorter sorter = new Sorter();
-        List<WashingMachineBooking> bookings = sorter.sortWashingMachineBooking(sorter.clearData(washingBookingMachineService.findById(id).getWashingMachineBookingList(), date));
+        List<WashingMachineBooking> bookings = findAllByWashingMachineId(id);
+        if(bookings == null){
+            return null;
+        }
+        bookings = sorter.sortWashingMachineBooking(sorter.clearData(bookings, date));
         WashingMachineBooking previousWashingMachineBooking = null;
         WashingMachineBooking currentMachineBooking = null;
         for (WashingMachineBooking booking :

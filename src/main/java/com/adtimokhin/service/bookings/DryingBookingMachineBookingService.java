@@ -25,6 +25,8 @@ public interface DryingBookingMachineBookingService {
 
     List<DryingMachineBooking> findAllByUser(User user);
 
+    List<DryingMachineBooking> findAllByDryingMachineId(int id);
+
     DryingMachineBooking findById(int id);
 
     DryingMachineBooking getBookingForMachineWithId(int id, String date);

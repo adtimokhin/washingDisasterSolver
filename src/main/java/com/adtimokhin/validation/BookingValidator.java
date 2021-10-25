@@ -35,7 +35,7 @@ public class BookingValidator {
 
     private static final DateFormatResolver dateFormatResolver = new DateFormatResolver();
 
-    public List<BookingError> validate(String machineType, String machineId, String startHour, String startMinute, String endHour, String endMinute, String date,User user, boolean isWashingMachine) {
+    public List<BookingError> validate(String machineType, String machineId, String startHour, String startMinute, String endHour, String endMinute, String date, User user, boolean isWashingMachine) {
         List<BookingError> errors = new ArrayList<>();
         try {
             int machineIdInt = Integer.parseInt(machineId);
@@ -44,41 +44,55 @@ public class BookingValidator {
             int endHourInt = Integer.parseInt(endHour);
             int endMinuteInt = Integer.parseInt(endMinute);
 
-            if(date == null){
-                errors.add(new BookingError("Date is not provided"));
+            if (date == null) {
+                errors.add(new BookingError("Date is not provided."));
+                return errors;
+            } else if (date.equals("")) {
+                errors.add(new BookingError("Date is not provided."));
                 return errors;
             }
 
-            if(machineType.equals(WASHING_MACHINE_TYPE)){
+            if (machineType.equals(WASHING_MACHINE_TYPE)) {
                 if (washingBookingMachineService.findById(machineIdInt) == null) {
                     errors.add(new BookingError("No such machine is found."));
                     return errors;
                 }
-            }else if(machineType.equals(DRYING_MACHINE_TYPE)){
+            } else if (machineType.equals(DRYING_MACHINE_TYPE)) {
                 if (dryingBookingMachineService.findById(machineIdInt) == null) {
                     errors.add(new BookingError("No such machine is found."));
                     return errors;
                 }
-            }else {
-                errors.add(new BookingError("You have to choose a valid machine type!"));
+            } else {
+                errors.add(new BookingError("You have to choose a valid machine type."));
+                return errors;
+            }
+
+            // checking if hours and minutes are in right range
+            if ((startHourInt < 0 || startHourInt > 23) || endHourInt < 0 || endHourInt > 23) {
+                errors.add(new BookingError("Hours should be in range 0-23."));
+                return errors;
+            }
+            if ((startMinuteInt < 0 || startMinuteInt > 59) || (endMinuteInt < 0 || endMinuteInt > 59)) {
+                errors.add(new BookingError("Minutes should be in range 0-59."));
                 return errors;
             }
 
 
-            if (dateFormatResolver.isTimeBigger(startHourInt, startMinuteInt, endHourInt, endMinuteInt)){
+            if (dateFormatResolver.isTimeBigger(startHourInt, startMinuteInt, endHourInt, endMinuteInt)) {
                 errors.add(new BookingError("Starting time should come before the finishing time."));
                 return errors;
             }
 
-            if(dateFormatResolver.isDateBeforeAnother(date, dateFormatResolver.today())){
-                errors.add(new BookingError("Booking is made for time that had already passed!"));
+            if (dateFormatResolver.isDateBeforeAnother(date, dateFormatResolver.today())) {
+                errors.add(new BookingError("Booking is made for time that had already passed."));
                 return errors;
             }
 
             // check if spot if free
             TimeTable timeTable = timeTableContainer.getTimeTable(machineIdInt, isWashingMachine);
-            if(!timeTable.isFreeBetween(startHourInt, startMinuteInt, endHourInt, endMinuteInt)){
-                errors.add(new BookingError("This time slot is not available"));return errors;
+            if (!timeTable.isFreeBetween(startHourInt, startMinuteInt, endHourInt, endMinuteInt)) {
+                errors.add(new BookingError("This time slot is not available."));
+                return errors;
             }
 
             if (user == null) {
@@ -90,7 +104,7 @@ public class BookingValidator {
             return null;
 
         } catch (Exception e) {
-            errors.add(new BookingError("Couldn't parse input into int."));
+            errors.add(new BookingError("Fill in all of the fields as numbers."));
             return errors;
         }
     }

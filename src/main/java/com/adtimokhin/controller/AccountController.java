@@ -6,6 +6,7 @@ import com.adtimokhin.model.bookings.WashingMachineBooking;
 import com.adtimokhin.security.ContextProvider;
 import com.adtimokhin.service.bookings.DryingBookingMachineBookingService;
 import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
+import com.adtimokhin.util.Sorter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,8 @@ public class AccountController {
     @Autowired
     private ContextProvider contextProvider;
 
+    private final Sorter sorter = new Sorter();
+
     @GetMapping("/")
     public String viewAccountInfo(
             @RequestParam(name = "msg", required = false) String msg,
@@ -43,10 +46,10 @@ public class AccountController {
 
         model.addAttribute("name" , user.getName());
         if(washingMachineBookingList != null){
-            model.addAttribute("washings" , washingMachineBookingList);
+            model.addAttribute("washings" , sorter.sortWashingMachineBooking(sorter.getRelevantWashingBookings(washingMachineBookingList)));
         }
         if(dryingMachineBookingList != null){
-            model.addAttribute("dryings" , dryingMachineBookingList);
+            model.addAttribute("dryings" , sorter.sortDryingMachineBookings(sorter.getRelevantDryingBookings(dryingMachineBookingList)));
         }
 
         if(msg != null){

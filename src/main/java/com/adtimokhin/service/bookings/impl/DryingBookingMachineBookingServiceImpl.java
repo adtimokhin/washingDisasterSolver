@@ -47,12 +47,20 @@ public class DryingBookingMachineBookingServiceImpl implements DryingBookingMach
 
     @Override
     public void delete(DryingMachineBooking booking) {
+        int id = booking.getDryingMachine().getId();
+
         dryingMachineBookingRepository.delete(booking);
+        timeTableContainer.updateTimeTable(id, false);
     }
 
     @Override
     public List<DryingMachineBooking> findAllByUser(User user) {
         return dryingMachineBookingRepository.findAllByUserIdOrderByIdAsc(user.getId());
+    }
+
+    @Override
+    public List<DryingMachineBooking> findAllByDryingMachineId(int id) {
+        return dryingMachineBookingRepository.findAllByDryingMachineId(id);
     }
 
     @Override
@@ -63,13 +71,17 @@ public class DryingBookingMachineBookingServiceImpl implements DryingBookingMach
     @Override
     public DryingMachineBooking getBookingForMachineWithId(int id, String date) {
         Sorter sorter = new Sorter();
-        List<DryingMachineBooking> bookings = sorter.sortDryingMachineBookings(sorter.clearDataDrying(dryingBookingMachineService.findById(id).getDryingMachineBookingList(), date));
+        List<DryingMachineBooking> bookings = findAllByDryingMachineId(id);
+        if (bookings == null) {
+            return null;
+        }
+        bookings = sorter.sortDryingMachineBookings(sorter.clearDataDrying(bookings, date));
         DryingMachineBooking previousWashingMachineBooking = null;
         DryingMachineBooking currentMachineBooking = null;
         for (DryingMachineBooking booking :
                 bookings) {
-            if (dateFormatResolver.isTimeBigger(date , booking.getStartDate())){
-                if(dateFormatResolver.isTimeBigger(booking.getEndDate(), date)){
+            if (dateFormatResolver.isTimeBigger(date, booking.getStartDate())) {
+                if (dateFormatResolver.isTimeBigger(booking.getEndDate(), date)) {
                     currentMachineBooking = booking;
                     break;
                 }
@@ -78,10 +90,10 @@ public class DryingBookingMachineBookingServiceImpl implements DryingBookingMach
             previousWashingMachineBooking = booking;
         }
 
-        if(currentMachineBooking == null){
+        if (currentMachineBooking == null) {
             return null;
         }
-        if(previousWashingMachineBooking == null){
+        if (previousWashingMachineBooking == null) {
             // todo: this is the place for the improvement.
             return null;
         }

@@ -92,4 +92,32 @@ public class Sorter {
 
         return dryingMachineBookings;
     }
+
+    public List<DryingMachineBooking> getRelevantDryingBookings(List<DryingMachineBooking> unclearList) {
+
+        List<DryingMachineBooking> dryingMachineBookings = new ArrayList<>();
+        String today = dateTimeResolver.today();
+
+        for (DryingMachineBooking dryingMachineBooking : unclearList) {
+            if (!dateTimeResolver.isDateBeforeAnother(dryingMachineBooking.getEndDate(), today)) {
+                dryingMachineBookings.add(dryingMachineBooking);
+            }
+        }
+
+        return dryingMachineBookings;
+    }
+
+    public List<WashingMachineBooking> getRelevantWashingBookings(List<WashingMachineBooking> unclearList) {
+
+        List<WashingMachineBooking> washingMachineBookings = new ArrayList<>();
+        String today = dateTimeResolver.today();
+
+        for (WashingMachineBooking washingMachineBooking : unclearList) {
+            if (!dateTimeResolver.isDateBeforeAnother(washingMachineBooking.getEndDate(), today)) {
+                washingMachineBookings.add(washingMachineBooking);
+            }
+        }
+
+        return washingMachineBookings;
+    }
 }

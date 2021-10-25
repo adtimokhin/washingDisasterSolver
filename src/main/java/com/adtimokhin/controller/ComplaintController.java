@@ -49,12 +49,16 @@ public class ComplaintController {
 
     @PostMapping("/add")
     public String addComplaintProcess(@RequestParam(name = "type") String type,
-                                      @RequestParam(name ="id") int id, Model model){
-        if (type.equals("W")){
+                                      @RequestParam(name = "id") int id, Model model) {
+        if(id < 0 || id > 10){ // todo: we need to calculate this max. value somehow else for the flexibility sake. But we won't do that right now.
+            model.addAttribute("msg" , "id in wrong range.");
+            return "complaints/complaint";
+        }
+
+        if (type.equals("W")) {
             WashingMachineBooking booking = washingBookingMachineBookingService.getBookingForMachineWithId(id, dateFormatResolver.today());
-            if(booking == null){
-                // todo: Объявить отправившего жалобу лгуном.
-                model.addAttribute("msg" , "Right now this machine is not booked. You are in right to ");
+            if (booking == null) {
+                model.addAttribute("msg", "Right now this machine is not booked or this is the first booking on a day. This system is currently is in no power to deal with this. Please, call someone to help.");
                 return "complaints/complaint";
             }
 
@@ -65,12 +69,10 @@ public class ComplaintController {
 
             washingMachineComplaintService.save(complaint);
 
-        }
-        else if(type.equals("D")){
-            DryingMachineBooking booking= dryingBookingMachineBookingService.getBookingForMachineWithId(id, dateFormatResolver.today());
-            if(booking == null){
-                // todo: Объявить отправившего жалобу лгуном.
-                model.addAttribute("msg" , "Right now this machine is not booked. You are in right to ");
+        } else if (type.equals("D")) {
+            DryingMachineBooking booking = dryingBookingMachineBookingService.getBookingForMachineWithId(id, dateFormatResolver.today());
+            if (booking == null) {
+                model.addAttribute("msg", "Right now this machine is not booked. You are in right to ");
                 return "complaints/complaint";
             }
 
@@ -84,15 +86,15 @@ public class ComplaintController {
     }
 
     @GetMapping("/")
-    public String viewAllComplaints(Model model){
+    public String viewAllComplaints(Model model) {
         List<WashingMachineComplaint> washingMachineComplaints = washingMachineComplaintService.findAll();
         List<DryingMachineComplaint> dryingMachineComplaints = dryingMachineComplaintService.findAll();
 
-        if(washingMachineComplaints != null) {
+        if (washingMachineComplaints != null) {
             model.addAttribute("washingMachineComplaints", washingMachineComplaints);
         }
-        if (dryingMachineComplaints != null){
-            model.addAttribute("dryingMachineComplaints" ,dryingMachineComplaints);
+        if (dryingMachineComplaints != null) {
+            model.addAttribute("dryingMachineComplaints", dryingMachineComplaints);
         }
 
         return "complaints/complaint";
