@@ -14,6 +14,7 @@ import com.adtimokhin.util.time.TimeTableContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -99,6 +100,26 @@ public class DryingBookingMachineBookingServiceImpl implements DryingBookingMach
             return null;
         }
         return previousWashingMachineBooking;
+    }
+
+    @Override
+    public List<DryingMachineBooking> findAllDryingMachineBookings(int userId, String date) {
+        Sorter sorter = new Sorter();
+        List<DryingMachineBooking> bookings = dryingMachineBookingRepository.findAllByUserId(userId);
+        if (bookings == null) {
+            return null;
+        }
+        bookings = sorter.sortDryingMachineBookings(sorter.clearDataDrying(bookings, date));
+        List<DryingMachineBooking> todaysBookings = new ArrayList<>();
+        for (DryingMachineBooking booking :
+                bookings) {
+            if (dateFormatResolver.datesMatch(booking.getStartDate(), date)) {
+                todaysBookings.add(booking);
+            }
+        }
+
+
+        return todaysBookings;
     }
 
 }

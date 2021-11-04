@@ -2,8 +2,12 @@ package com.adtimokhin.service;
 
 import com.adtimokhin.aspect.NotEmptyArguments;
 import com.adtimokhin.model.User;
+import com.adtimokhin.model.bookings.DryingMachineBooking;
+import com.adtimokhin.model.bookings.WashingMachineBooking;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author adtimokhin

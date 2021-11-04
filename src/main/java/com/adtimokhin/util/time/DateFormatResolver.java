@@ -19,7 +19,7 @@ public class DateFormatResolver {
     public static final int MINUTE = 4;
 
     public static final long MINUTES_BEFORE_CANCEL = 60 * 2; // 2 hours, but in minutes.
-    public static final long MAX_LENGTH_FOR_BOOKING = 60 * 2; // 2 hours, but in minutes.
+    public static final long MAX_LENGTH_FOR_BOOKING = 60 * 2 + 15; // 135 minutes.
 
 
     public int getDatePart(String date, int part) {

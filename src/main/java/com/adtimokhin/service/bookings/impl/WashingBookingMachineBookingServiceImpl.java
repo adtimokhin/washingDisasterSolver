@@ -13,6 +13,7 @@ import com.adtimokhin.util.time.TimeTableContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -100,5 +101,24 @@ public class WashingBookingMachineBookingServiceImpl implements WashingBookingMa
         return previousWashingMachineBooking;
     }
 
+    @Override
+    public List<WashingMachineBooking> findAllWashingMachineBookings(int userId, String date) {
+        Sorter sorter = new Sorter();
+        List<WashingMachineBooking> bookings = washingMachineBookingRepository.findAllByUserId(userId);
+        if (bookings == null) {
+            return null;
+        }
+        bookings = sorter.sortWashingMachineBooking(sorter.clearData(bookings, date));
+        List<WashingMachineBooking> todaysBookings = new ArrayList<>();
+        for (WashingMachineBooking booking :
+                bookings) {
+            if (dateFormatResolver.datesMatch(booking.getStartDate(), date)) {
+                todaysBookings.add(booking);
+            }
+        }
 
+
+        return todaysBookings;
+
+    }
 }

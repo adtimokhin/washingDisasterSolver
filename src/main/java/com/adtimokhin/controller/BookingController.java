@@ -76,6 +76,7 @@ public class BookingController {
     public String getAllWashingMachineData(@PathVariable(value = "type", required = false) String machineType,
                                            @RequestParam(name = "date", required = false) String date,
                                            @RequestParam(name = "error", required = false) String error,
+                                           @RequestParam(name = "msg" , required = false) String msg,
                                            Model model) {
         // getting information about the time when certain machines are available.
 
@@ -101,6 +102,8 @@ public class BookingController {
 
         if (error != null) {
             model.addAttribute("error", error);
+        }else if(msg != null){
+            model.addAttribute("msg", msg);
         }
         model.addAttribute("machineType", machineType);
         model.addAttribute("timeTables", timeTables);
@@ -149,7 +152,9 @@ public class BookingController {
                 dryingBookingMachineBookingService.save(booking);
             }
 
-            return "index";
+            model.addAttribute("msg" , "Your booking is all set!");
+
+            return "redirect:/booking/view/" + machineType;
         }
         model.addAttribute("error", errors.get(0).getMessage());
         model.addAttribute("date", date);

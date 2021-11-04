@@ -81,6 +81,14 @@
         </div>
     </#if>
 
+    <#if msg??>
+        <div class="row">
+            <div class="col-12">
+                <h4 class="error-msg">${msg}</h4>
+            </div>
+        </div>
+    </#if>
+
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">

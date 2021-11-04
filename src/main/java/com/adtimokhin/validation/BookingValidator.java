@@ -1,6 +1,10 @@
 package com.adtimokhin.validation;
 
 import com.adtimokhin.model.User;
+import com.adtimokhin.model.bookings.DryingMachineBooking;
+import com.adtimokhin.model.bookings.WashingMachineBooking;
+import com.adtimokhin.service.bookings.DryingBookingMachineBookingService;
+import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
 import com.adtimokhin.service.machine.DryingBookingMachineService;
 import com.adtimokhin.service.machine.WashingBookingMachineService;
 import com.adtimokhin.util.time.DateFormatResolver;
@@ -15,6 +19,8 @@ import java.util.List;
 
 import static com.adtimokhin.controller.BookingController.DRYING_MACHINE_TYPE;
 import static com.adtimokhin.controller.BookingController.WASHING_MACHINE_TYPE;
+import static com.adtimokhin.util.time.DateFormatResolver.MAX_LENGTH_FOR_BOOKING;
+import static com.adtimokhin.util.time.DateFormatResolver.MINUTES_BEFORE_CANCEL;
 
 /**
  * @author adtimokhin
@@ -28,10 +34,18 @@ public class BookingValidator {
     private WashingBookingMachineService washingBookingMachineService;
 
     @Autowired
+    private WashingBookingMachineBookingService washingBookingMachineBookingService;
+
+    @Autowired
     private DryingBookingMachineService dryingBookingMachineService;
 
     @Autowired
+    private DryingBookingMachineBookingService dryingBookingMachineBookingService;
+
+    @Autowired
     private TimeTableContainer timeTableContainer;
+
+    public final static int MAX_BOOKINGS = 3;
 
     private static final DateFormatResolver dateFormatResolver = new DateFormatResolver();
 
@@ -94,10 +108,35 @@ public class BookingValidator {
                 errors.add(new BookingError("This time slot is not available."));
                 return errors;
             }
+            String endDate = dateFormatResolver.resolveTimeForDate(endHour, endMinute, "0000 00 00 00:00");
+            String startDate = dateFormatResolver.resolveTimeForDate(startHour, startMinute, "0000 00 00 00:00");
+            if (dateFormatResolver.areFarEnoughInTime(endDate, startDate, MAX_LENGTH_FOR_BOOKING)) {
+                errors.add(new BookingError("Bookings can be made for " + MAX_LENGTH_FOR_BOOKING + " minutes at most."));
+                return errors;
+            }
 
             if (user == null) {
                 errors.add(new BookingError("Unidentified user."));
                 return errors;
+            }
+
+            // check how many bookings user as for this day
+            if (isWashingMachine) {
+                List<WashingMachineBooking> bookings = (washingBookingMachineBookingService.findAllWashingMachineBookings(user.getId(), date));
+                if(bookings != null){
+                    if(bookings.size() >= MAX_BOOKINGS){
+                        errors.add(new BookingError("You can make maximum of " + MAX_BOOKINGS + " bookings per day."));
+                        return errors;
+                    }
+                }
+            }else {
+                List<DryingMachineBooking> bookings = (dryingBookingMachineBookingService.findAllDryingMachineBookings(user.getId(), date));
+                if(bookings != null){
+                    if(bookings.size() >= MAX_BOOKINGS){
+                        errors.add(new BookingError("You can make maximum of " + MAX_BOOKINGS + " bookings per day."));
+                        return errors;
+                    }
+                }
             }
 
             // return null if all validations have passed

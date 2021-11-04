@@ -3,6 +3,7 @@ package com.adtimokhin.service.bookings;
 import com.adtimokhin.aspect.NotEmptyArguments;
 import com.adtimokhin.model.User;
 import com.adtimokhin.model.bookings.DryingMachineBooking;
+import com.adtimokhin.model.bookings.WashingMachineBooking;
 import com.adtimokhin.model.machine.DryingMachine;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,5 +36,9 @@ public interface DryingBookingMachineBookingService {
     DryingMachineBooking findById(int id);
 
     DryingMachineBooking getBookingForMachineWithId(int id, String date);
+
+
+    List<DryingMachineBooking> findAllDryingMachineBookings(int userId, String date);
+
 
 }

@@ -23,4 +23,6 @@ public interface WashingMachineBookingRepository extends JpaRepository<WashingMa
 
     List<WashingMachineBooking> findAllByWashingMachineId(int id);
 
+    List<WashingMachineBooking> findAllByUserId(int id);
+
 }

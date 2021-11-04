@@ -36,4 +36,6 @@ public interface WashingBookingMachineBookingService {
 
     WashingMachineBooking getBookingForMachineWithId(int id, String date);
 
+    List<WashingMachineBooking> findAllWashingMachineBookings(int userId, String date);
+
 }
