@@ -27,6 +27,30 @@
         </div>
     </div>
 
+
+
+    <#if error??>
+        <div class="row">
+            <div class="col-12">
+                <h4 class="error-msg"> Error message: ${error}</h4>
+            </div>
+        </div>
+    </#if>
+
+    <#if msg??>
+        <div class="row">
+            <div class="col-12">
+                <h4 class="error-msg">Message: ${msg}</h4>
+            </div>
+        </div>
+    </#if>
+
+    <div class="row">
+        <div class="col-12">
+            <h4 class="error-msg">This are the bookings for ${date}:</h4>
+        </div>
+    </div>
+
     <#if timeTables??>
         <div class="row">
             <div class="col-2"></div>
@@ -62,6 +86,10 @@
             <div class="form-container">
                 <form method="get" action="/booking/view/${machineType}">
                     <div class="input-holder">
+                        <h4 class="form-title">SELECT DATE TO VIEW </h4>
+                    </div>
+
+                    <div class="input-holder">
                         <input type="text" name="date" value="${date}" class="mx-auto d-block">
                     </div>
                     <div class="input-holder">
@@ -72,22 +100,6 @@
         </div>
         <div class="col-2"></div>
     </div>
-
-    <#if error??>
-        <div class="row">
-            <div class="col-12">
-                <h4 class="error-msg">${error}</h4>
-            </div>
-        </div>
-    </#if>
-
-    <#if msg??>
-        <div class="row">
-            <div class="col-12">
-                <h4 class="error-msg">${msg}</h4>
-            </div>
-        </div>
-    </#if>
 
     <div class="row">
         <div class="col-2"></div>

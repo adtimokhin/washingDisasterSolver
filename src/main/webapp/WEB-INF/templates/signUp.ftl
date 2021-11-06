@@ -29,7 +29,7 @@
             <div class="form-container">
                 <form method="post" action="/sign_up">
                     <div class="input-holder">
-                        <h4 class="form-title">SING UP</h4>
+                        <h4 class="form-title">SIGN UP</h4>
                     </div>
                     <div class="input-holder">
                         <p class="mx-auto d-block">Enter your email address<br/></p>

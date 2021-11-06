@@ -59,7 +59,7 @@ public class BackupUtil {
     private static final String ABSOLUTE_PATH = "/Users/atimokhina/Desktop/washingDisasterSolver/";
 
 
-    @Scheduled(cron = "0 30 23 * * ?", zone = "Europe/London")
+    @Scheduled(cron = "0 30 22 * * ?", zone = "Europe/London")
     public void saveBookingInformation() throws IOException {
         String date = dateFormatResolver.today();
         logger.trace("Initiating deletion of all bookings for {}.", date);

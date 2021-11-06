@@ -50,7 +50,7 @@ public class TimeTable {
             String startDate = current.getStartDate();
             String endDate = current.getEndDate();
 
-            String oldEnd = timePeriods.get(i).getDate();
+            String oldEnd = timePeriods.get(timePeriods.size() - 1).getDate();
 
             if (!dateFormatResolver.datesMatch(startDate, oldEnd)) {
                 // create new a free slot in between
@@ -70,7 +70,7 @@ public class TimeTable {
                     false));
         }
 
-        String oldEnd = timePeriods.get(timePeriods.size()-1).getDate();
+        String oldEnd = timePeriods.get(timePeriods.size() - 1).getDate();
         String startDate = "0000 00 00 22:00";
 
         if (!dateFormatResolver.datesMatch(startDate, oldEnd)) {
@@ -87,7 +87,7 @@ public class TimeTable {
         timePeriods.add(new TimePeriod(22, 0, 23, 59, false));
     }
 
-    public void generateTimeTable(DryingMachine machine, DryingBookingMachineBookingService dryingMachineBookingService,  String date, Sorter sorter) {
+    public void generateTimeTable(DryingMachine machine, DryingBookingMachineBookingService dryingMachineBookingService, String date, Sorter sorter) {
 
         this.machine = machine;
 
@@ -104,7 +104,7 @@ public class TimeTable {
             String startDate = current.getStartDate();
             String endDate = current.getEndDate();
 
-            String oldEnd = timePeriods.get(i).getDate();
+            String oldEnd = timePeriods.get(timePeriods.size() - 1).getDate();
 
             if (!dateFormatResolver.datesMatch(startDate, oldEnd)) {
                 // create new a free slot in between
@@ -124,7 +124,7 @@ public class TimeTable {
                     false));
         }
 
-        String oldEnd = timePeriods.get(timePeriods.size()-1).getDate();
+        String oldEnd = timePeriods.get(timePeriods.size() - 1).getDate();
         String startDate = "0000 00 00 22:00";
 
         if (!dateFormatResolver.datesMatch(startDate, oldEnd)) {

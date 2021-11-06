@@ -1,0 +1,1 @@
+WashingMachineBooking{id=107, userId=15, washingMachineId=4, startDate='2021 11 04 21:59', endDate='2021 11 04 22:00'}

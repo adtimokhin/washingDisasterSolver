@@ -1,5 +1,9 @@
 package com.adtimokhin.util.time;
 
+import com.adtimokhin.util.backup.BackupUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -10,7 +14,12 @@ import java.time.format.DateTimeFormatter;
 
 public class DateFormatResolver {
 
+    private final static Logger logger = LoggerFactory.getLogger(DateFormatResolver.class);
+
+
     public static final String DATE_FORMAT = "YYYY MM dd HH:mm";
+
+    public static final String DUMMY_DATE = "0000 00 00 00:00";
 
     public static final int YEAR = 0;
     public static final int MONTH = 1;
@@ -19,7 +28,10 @@ public class DateFormatResolver {
     public static final int MINUTE = 4;
 
     public static final long MINUTES_BEFORE_CANCEL = 60 * 2; // 2 hours, but in minutes.
-    public static final long MAX_LENGTH_FOR_BOOKING = 60 * 2 + 15; // 135 minutes.
+
+    public static final long MAX_LENGTH_FOR_BOOKING = 60 * 2 + 20; // 140 minutes.
+    public static final long MAX_LENGTH_FOR_BOOKING_WASHING_MACHINE = 60 * 2 + 20; // 140 minutes.
+    public static final long MAX_LENGTH_FOR_BOOKING_DRYING_MACHINE = 60 * 2 + 20; // 140 minutes.
 
 
     public int getDatePart(String date, int part) {
@@ -135,40 +147,87 @@ public class DateFormatResolver {
         int yearDate = getDatePart(dateOne, YEAR);
         int yearToday = getDatePart(dateTwo, YEAR);
         minuteDifference += (yearDate - yearToday) * 365 * 24 * 60;
-        if(minuteDifference >= MINUTES_BEFORE_CANCEL){
-            return true;
-        }
+//        logger.trace("Minute difference YY : {}", minuteDifference);
+//        if(minuteDifference >= MINUTES_BEFORE_CANCEL){
+//            return true;
+//        }
 
         //comparing months
         int monthDate = getDatePart(dateOne, MONTH);
         int monthToday = getDatePart(dateTwo, MONTH);
         minuteDifference += (monthDate - monthToday) * 30 * 24 * 60;
-        if(minuteDifference >= distance){
-            return true;
-        }
+//        logger.trace("Minute difference MM : {}", minuteDifference);
+
+//        if(minuteDifference >= distance){
+//            return true;
+//        }
 
         //comparing days
         int dayDate = getDatePart(dateOne, DAY);
         int dayToday = getDatePart(dateTwo, DAY);
         minuteDifference += (dayDate - dayToday) * 24 * 60;
-        if(minuteDifference >= distance){
-            return true;
-        }
+//        logger.trace("Minute difference DD : {}", minuteDifference);
+//        if(minuteDifference >= distance){
+//            return true;
+//        }
 
         //comparing hours
         int hourDate = getDatePart(dateOne, HOUR);
         int hourToday = getDatePart(dateTwo, HOUR);
         minuteDifference += (hourDate - hourToday) * 60;
-        if(minuteDifference >= distance){
-            return true;
-        }
+//        logger.trace("Minute difference HH : {}", minuteDifference);
+
+//        if(minuteDifference >= distance){
+//            return true;
+//        }
 
         //comparing minutes
-        int minuteDate =getDatePart(dateOne, MINUTE);
-        int minuteToday = getDatePart(dateTwo , MINUTE);
+        int minuteDate = getDatePart(dateOne, MINUTE);
+        int minuteToday = getDatePart(dateTwo, MINUTE);
         minuteDifference += (minuteDate - minuteToday);
+//        logger.trace("Minute difference MM : {}", minuteDifference);
 
-        return minuteDifference >= distance;
+
+        return minuteDifference > (distance);
     }
 
+    public boolean appropriateFormat(String date) {
+        String[] parts = date.split(" ");
+        String[] origParts = DATE_FORMAT.split(" ");
+
+        if (parts.length != origParts.length) {
+            return false;
+        }
+
+        for (int i = 0; i < origParts.length - 1; i++) {
+            try {
+                Integer.parseInt(parts[i]);
+                if (parts[i].length() != origParts[i].length()) {
+                    return false;
+                }
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        String[] hourMinParts = parts[parts.length - 1].split(":");
+        String[] origHourMinParts = origParts[origParts.length - 1].split(":");
+
+        if (hourMinParts.length != origHourMinParts.length) {
+            return false;
+        }
+
+        for (int i = 0; i < origHourMinParts.length; i++) {
+            try {
+                Integer.parseInt(hourMinParts[i]);
+                if (hourMinParts[i].length() != origHourMinParts[i].length()) {
+                    return false;
+                }
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

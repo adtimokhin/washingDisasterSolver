@@ -19,8 +19,7 @@ import java.util.List;
 
 import static com.adtimokhin.controller.BookingController.DRYING_MACHINE_TYPE;
 import static com.adtimokhin.controller.BookingController.WASHING_MACHINE_TYPE;
-import static com.adtimokhin.util.time.DateFormatResolver.MAX_LENGTH_FOR_BOOKING;
-import static com.adtimokhin.util.time.DateFormatResolver.MINUTES_BEFORE_CANCEL;
+import static com.adtimokhin.util.time.DateFormatResolver.*;
 
 /**
  * @author adtimokhin
@@ -45,7 +44,7 @@ public class BookingValidator {
     @Autowired
     private TimeTableContainer timeTableContainer;
 
-    public final static int MAX_BOOKINGS = 3;
+    public final static int MAX_BOOKINGS = 1;
 
     private static final DateFormatResolver dateFormatResolver = new DateFormatResolver();
 
@@ -97,8 +96,13 @@ public class BookingValidator {
                 return errors;
             }
 
+            if(!dateFormatResolver.appropriateFormat(date)){
+                errors.add(new BookingError("Please check that you leave time in format like this: " + DATE_FORMAT));
+                return errors;
+            }
+
             if (dateFormatResolver.isDateBeforeAnother(date, dateFormatResolver.today())) {
-                errors.add(new BookingError("Booking is made for time that had already passed."));
+                errors.add(new BookingError("Booking is made for time that have already passed."));
                 return errors;
             }
 
@@ -108,10 +112,13 @@ public class BookingValidator {
                 errors.add(new BookingError("This time slot is not available."));
                 return errors;
             }
-            String endDate = dateFormatResolver.resolveTimeForDate(endHour, endMinute, "0000 00 00 00:00");
-            String startDate = dateFormatResolver.resolveTimeForDate(startHour, startMinute, "0000 00 00 00:00");
-            if (dateFormatResolver.areFarEnoughInTime(endDate, startDate, MAX_LENGTH_FOR_BOOKING)) {
-                errors.add(new BookingError("Bookings can be made for " + MAX_LENGTH_FOR_BOOKING + " minutes at most."));
+            String endDate = dateFormatResolver.resolveTimeForDate(endHour, endMinute, DUMMY_DATE);
+            String startDate = dateFormatResolver.resolveTimeForDate(startHour, startMinute, DUMMY_DATE);
+
+            long maxBooking = (isWashingMachine)? MAX_LENGTH_FOR_BOOKING_WASHING_MACHINE : MAX_LENGTH_FOR_BOOKING_DRYING_MACHINE;
+
+            if (dateFormatResolver.areFarEnoughInTime(endDate, startDate, maxBooking)) {
+                errors.add(new BookingError("Bookings can be made for " + maxBooking + " minutes at most."));
                 return errors;
             }
 
