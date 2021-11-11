@@ -3,6 +3,7 @@ package com.adtimokhin.model.machine;
 import com.adtimokhin.model.bookings.DryingMachineBooking;
 import com.adtimokhin.model.bookings.WashingMachineBooking;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -15,8 +16,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "washing_machine_table", schema = "main_schema")
-//@Getter
-//@Setter
+@Getter
+@Setter
+@NoArgsConstructor
 public class WashingMachine implements Machine{
 
     @Id
@@ -31,18 +33,4 @@ public class WashingMachine implements Machine{
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public List<WashingMachineBooking> getWashingMachineBookingList() {
-        return washingMachineBookingList;
-    }
-
-    public void setWashingMachineBookingList(List<WashingMachineBooking> washingMachineBookingList) {
-        this.washingMachineBookingList = washingMachineBookingList;
-    }
-
-    public WashingMachine() {
-    }
 }

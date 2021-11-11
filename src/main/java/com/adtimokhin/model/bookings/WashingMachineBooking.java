@@ -4,6 +4,7 @@ import com.adtimokhin.model.User;
 import com.adtimokhin.model.complaints.WashingMachineComplaint;
 import com.adtimokhin.model.machine.WashingMachine;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -16,9 +17,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "washing_machine_bookings_table", schema = "main_schema")
-//@NoArgsConstructor
-//@Getter
-//@Setter
+@NoArgsConstructor
+@Getter
+@Setter
 public class WashingMachineBooking implements Booking {
 
 
@@ -41,8 +42,6 @@ public class WashingMachineBooking implements Booking {
     private String endDate;
 
     @OneToMany(mappedBy = "booking")
-    @Getter
-    @Setter
     private List<WashingMachineComplaint> washingMachineComplaints;
 
     public WashingMachineBooking(User user, WashingMachine washingMachine, String startDate, String endDate) {
@@ -61,49 +60,6 @@ public class WashingMachineBooking implements Booking {
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 '}';
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public WashingMachine getWashingMachine() {
-        return washingMachine;
-    }
-
-    public void setWashingMachine(WashingMachine washingMachine) {
-        this.washingMachine = washingMachine;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public WashingMachineBooking() {
     }
 
     @Override

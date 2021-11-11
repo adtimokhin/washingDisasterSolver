@@ -1,2 +1,13 @@
 # Project exclude paths
-/target/
+# Intellij
+.idea/
+*.iml
+*.iws
+bookings*.txt
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/

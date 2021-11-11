@@ -5,6 +5,7 @@ import com.adtimokhin.model.bookings.WashingMachineBooking;
 import com.adtimokhin.model.complaints.DryingMachineComplaint;
 import com.adtimokhin.model.complaints.WashingMachineComplaint;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -17,9 +18,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_table", schema = "main_schema")
-//@Getter
-//@Setter
-//@NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -42,13 +43,9 @@ public class User {
     private List<WashingMachineBooking> washingMachineBookingsList;
 
     @OneToMany(mappedBy = "reportingUser" , targetEntity = WashingMachineComplaint.class)
-    @Setter
-    @Getter
     private List<WashingMachineComplaint> reportingWashingMachineComplaints;
 
     @OneToMany(mappedBy = "reportingUser" , targetEntity = DryingMachineComplaint.class)
-    @Setter
-    @Getter
     private List<DryingMachineComplaint> reportingDryingMachineComplaints;
 
     @Column(name = "email_token")
@@ -61,78 +58,4 @@ public class User {
         this.password = password;
     }
 
-    public User() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<DryingMachineBooking> getDryingMachineBookingList() {
-        return dryingMachineBookingList;
-    }
-
-    public void setDryingMachineBookingList(List<DryingMachineBooking> dryingMachineBookingList) {
-        this.dryingMachineBookingList = dryingMachineBookingList;
-    }
-
-    public List<WashingMachineBooking> getWashingMachineBookingsList() {
-        return washingMachineBookingsList;
-    }
-
-    public void setWashingMachineBookingsList(List<WashingMachineBooking> washingMachineBookingsList) {
-        this.washingMachineBookingsList = washingMachineBookingsList;
-    }
-
-    public String getEmailToken() {
-        return emailToken;
-    }
-
-    public void setEmailToken(String emailToken) {
-        this.emailToken = emailToken;
-    }
-
-    public List<WashingMachineComplaint> getReportingWashingMachineComplaints() {
-        return reportingWashingMachineComplaints;
-    }
-
-    public void setReportingWashingMachineComplaints(List<WashingMachineComplaint> reportingWashingMachineComplaints) {
-        this.reportingWashingMachineComplaints = reportingWashingMachineComplaints;
-    }
-
-    public List<DryingMachineComplaint> getReportingDryingMachineComplaints() {
-        return reportingDryingMachineComplaints;
-    }
-
-    public void setReportingDryingMachineComplaints(List<DryingMachineComplaint> reportingDryingMachineComplaints) {
-        this.reportingDryingMachineComplaints = reportingDryingMachineComplaints;
-    }
 }

@@ -49,6 +49,9 @@ public class AuthController {
     @Autowired
     private WashingBookingMachineBookingService washingBookingMachineBookingService;
 
+    private final static Logger logger = LoggerFactory.getLogger(AuthController.class);
+
+
     @GetMapping("/login")
     public String loginGet(@RequestParam(value = "error", required = false) Boolean error,
                            Model model, HttpServletRequest request) {
@@ -95,7 +98,9 @@ public class AuthController {
 
 
     @GetMapping("/")
-    public String index(){return "index";}
+    public String index(){
+        logger.trace("AHAHHAHAHAHhjh");
+        return "index";}
 
 
     @GetMapping("/verify/{token}")

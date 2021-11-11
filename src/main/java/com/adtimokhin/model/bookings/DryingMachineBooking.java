@@ -20,9 +20,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "drying_machine_bookings_table", schema = "main_schema")
-//@NoArgsConstructor
-//@Getter
-//@Setter
+@NoArgsConstructor
+@Getter
+@Setter
 public class DryingMachineBooking implements Booking {
 
     @Id
@@ -44,8 +44,6 @@ public class DryingMachineBooking implements Booking {
     private String endDate;
 
     @OneToMany(mappedBy = "booking")
-    @Getter
-    @Setter
     private List<DryingMachineComplaint> complaintList;
 
     public DryingMachineBooking(User user, DryingMachine dryingMachine, String startDate, String endDate) {
@@ -64,49 +62,6 @@ public class DryingMachineBooking implements Booking {
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 '}';
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public DryingMachine getDryingMachine() {
-        return dryingMachine;
-    }
-
-    public void setDryingMachine(DryingMachine dryingMachine) {
-        this.dryingMachine = dryingMachine;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public DryingMachineBooking() {
     }
 
     @Override
