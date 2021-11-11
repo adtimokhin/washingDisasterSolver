@@ -51,6 +51,9 @@ public class User {
     @Getter
     private List<DryingMachineComplaint> reportingDryingMachineComplaints;
 
+    @Column(name = "email_token")
+    private String emailToken;
+
 
     public User(String name, String email, String password) {
         this.name = name;
@@ -107,5 +110,29 @@ public class User {
 
     public void setWashingMachineBookingsList(List<WashingMachineBooking> washingMachineBookingsList) {
         this.washingMachineBookingsList = washingMachineBookingsList;
+    }
+
+    public String getEmailToken() {
+        return emailToken;
+    }
+
+    public void setEmailToken(String emailToken) {
+        this.emailToken = emailToken;
+    }
+
+    public List<WashingMachineComplaint> getReportingWashingMachineComplaints() {
+        return reportingWashingMachineComplaints;
+    }
+
+    public void setReportingWashingMachineComplaints(List<WashingMachineComplaint> reportingWashingMachineComplaints) {
+        this.reportingWashingMachineComplaints = reportingWashingMachineComplaints;
+    }
+
+    public List<DryingMachineComplaint> getReportingDryingMachineComplaints() {
+        return reportingDryingMachineComplaints;
+    }
+
+    public void setReportingDryingMachineComplaints(List<DryingMachineComplaint> reportingDryingMachineComplaints) {
+        this.reportingDryingMachineComplaints = reportingDryingMachineComplaints;
     }
 }

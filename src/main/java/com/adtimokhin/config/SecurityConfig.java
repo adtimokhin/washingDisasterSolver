@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/");
+                .accessDeniedPage("/booking/actions");
     }
 
     @Bean

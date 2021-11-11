@@ -4,6 +4,8 @@ import com.adtimokhin.model.User;
 import com.adtimokhin.service.UserService;
 import com.adtimokhin.service.bookings.WashingBookingMachineBookingService;
 import com.adtimokhin.service.machine.WashingBookingMachineService;
+import com.adtimokhin.util.email.SimpleEmailSender;
+import com.adtimokhin.util.token.SimpleEmailTokenGenerator;
 import com.adtimokhin.validation.UserValidator;
 import com.adtimokhin.validation.errors.UserError;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,6 +38,9 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SimpleEmailSender emailSender;
 
     @Autowired
     @Qualifier("washingBookingMachineServiceImpl")
@@ -79,20 +85,27 @@ public class AuthController {
         if (!errorList.isEmpty()) {
             model.addAttribute("errors", errorList);
             return "signUp";
-        } else {// we want to save user in our database
+        } else {
             userService.save(user);
-            return "index"; // todo: change
-//            emailSender.sendEmailVerificationEmail(user);
+            emailSender.sendEmailVerificationEmail(user);
+            return "email/verificationEmailSentConfirmation";
         }
 
     }
 
 
     @GetMapping("/")
-    public String index(){
-        return "index";}
+    public String index(){return "index";}
 
 
-
+    @GetMapping("/verify/{token}")
+    public String verifyEmailPost(@PathVariable(name = "token") String token) {
+        User user = userService.findByEmailToken(token);
+        if (user != null) { // if email was verified
+            userService.removeEmailToken(user);
+            return "email/successfulVerification";
+        }
+        return "email/unsuccessfulVerification";
+    }
 
 }

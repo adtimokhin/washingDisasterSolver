@@ -21,4 +21,11 @@ public interface UserService {
     @Transactional
     @NotEmptyArguments
     void save(User user);
+
+    List<String> findAllEmailTokens();
+
+    @Transactional
+    void removeEmailToken(User user);
+
+    User findByEmailToken(String token);
 }

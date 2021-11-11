@@ -143,15 +143,16 @@ public class BookingController {
         }
         if (date.length() == "2021 11 06".length()) {
             date += " 00:00";
-        } else if (date.length() > "2021 11 06".length()) {
-            model.addAttribute("error", "Enter date in the first box. Enter it in format: " + DATE_FORMAT);
-            model.addAttribute("date", dateFormatResolver.today());
-
-            if (!(DRYING_MACHINE_TYPE.equals(machineType) || WASHING_MACHINE_TYPE.equals(machineType))) {
-                return "redirect:/booking/view/error";
-            }
-            return "redirect:/booking/view/" + machineType;
         }
+//        else if (date.length() > "2021 11 06".length()) {
+//            model.addAttribute("error", "Enter date in the first box. Enter it in format: " + DATE_FORMAT);
+//            model.addAttribute("date", dateFormatResolver.today());
+//
+//            if (!(DRYING_MACHINE_TYPE.equals(machineType) || WASHING_MACHINE_TYPE.equals(machineType))) {
+//                return "redirect:/booking/view/error";
+//            }
+//            return "redirect:/booking/view/" + machineType;
+//        }
 
 
         User user = contextProvider.getUser();

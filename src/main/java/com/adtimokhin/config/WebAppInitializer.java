@@ -20,7 +20,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[]{WebConfig.class, PersistenceConfig.class,
-                SecurityConfig.class, SyncConfig.class};
+                SecurityConfig.class, SyncConfig.class, AspectConfig.class, EmailConfig.class};
     }
 
     @Override

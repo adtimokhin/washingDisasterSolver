@@ -43,6 +43,10 @@ public class AuthProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Bad credentials");
         }
 
+        if(user.getEmailToken() != null){
+            throw new LockedException("Email is not verified");
+        }
+
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
 //        authorities.add(user.getRole());
         return new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), authorities);
