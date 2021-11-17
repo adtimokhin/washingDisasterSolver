@@ -47,7 +47,7 @@
 
     <div class="row">
         <div class="col-12">
-            <h4 class="error-msg">This are the bookings for ${date}:</h4>
+            <h4 class="error-msg">This are the bookings for ${representativeDate}:</h4>
         </div>
     </div>
 
@@ -84,17 +84,16 @@
         <div class="col-2"></div>
         <div class="col-8">
             <div class="form-container">
-                <form method="get" action="/booking/view/${machineType}">
+                <form method="get" action="/booking/choose/date/${machineType}">
                     <div class="input-holder">
                         <h4 class="form-title">SELECT DATE TO VIEW </h4>
                     </div>
-
-                    <div class="input-holder">
-                        <input type="text" name="date" value="${date}" class="mx-auto d-block">
-                    </div>
+                        <input type="hidden" name="date" value="${date}" class="mx-auto d-block">
+                        <input type="hidden" name="machineType" value="${machineType}" class="mx-auto d-block">
                     <div class="input-holder">
                         <input type="submit" class="mx-auto d-block button" value="Look up machines for this date">
                     </div>
+<#--                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">-->
                 </form>
             </div>
         </div>

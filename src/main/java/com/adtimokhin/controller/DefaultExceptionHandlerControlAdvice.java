@@ -36,12 +36,12 @@ public class DefaultExceptionHandlerControlAdvice {
         return "errors/500";
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500
-    @ExceptionHandler(value = Exception.class)
-    public String sampleExceptionHandler(Exception e) {
-        logger.error("Internal server error it was caused by " + e.getMessage() + ".\nFull stack trace:" + Arrays.toString(e.getStackTrace()));
-        return "errors/500";
-    }
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500
+//    @ExceptionHandler(value = Exception.class)
+//    public String sampleExceptionHandler(Exception e) {
+//        logger.error("Internal server error it was caused by " + e.getMessage() + ".\nFull stack trace:" + Arrays.toString(e.getStackTrace()));
+//        return "errors/500";
+//    }
 
 
 }

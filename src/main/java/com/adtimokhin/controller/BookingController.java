@@ -86,21 +86,25 @@ public class BookingController {
                                            @RequestParam(name = "msg", required = false) String msg,
                                            Model model) {
         // getting information about the time when certain machines are available.
+        String stringDate = timeTableContainer.getDay();
+        String dateRepresent = stringDate.substring(0, "2021 18 18".length()).replace(" ", "-");
 
-//        washingBookingMachineBookingService.delete(washingBookingMachineBookingService.findById(82));
 
         if (date != null) {
-            if (dateFormatResolver.appropriateFormat(date)) {
-                if (!dateFormatResolver.onTheSameDay(date, timeTableContainer.getDay())) {
+            if (dateFormatResolver.isInAppropriateFormat(date)) {
+                String temp = date;
+               date = date.replace("-", " ") + " 00:00";
+                if (!dateFormatResolver.onTheSameDay(date, stringDate)) {
                     timeTableContainer.changeDay(date);
+                    stringDate = date;
+                    dateRepresent = temp;
                 }
-
             }
-            model.addAttribute("date", timeTableContainer.getDay());
-
-        } else {
-            model.addAttribute("date", timeTableContainer.getDay());
         }
+
+        model.addAttribute("date",stringDate);
+        model.addAttribute("representativeDate", dateRepresent);
+
         List<TimeTable> timeTables;
         if (WASHING_MACHINE_TYPE.equals(machineType)) {
             timeTables = timeTableContainer.getWashingMachineTimeTables();
@@ -119,6 +123,34 @@ public class BookingController {
         model.addAttribute("machineType", machineType);
         model.addAttribute("timeTables", timeTables);
         return "booking/preview";
+    }
+
+    @GetMapping("/choose/date/{type}")
+    public String viewDates(@PathVariable(value = "type", required = false) String machineType,
+                            @RequestParam(name = "date") String date,
+                            Model model){
+
+            if (!(DRYING_MACHINE_TYPE.equals(machineType) || WASHING_MACHINE_TYPE.equals(machineType))) {
+                return "redirect:/booking/view/error";
+            }
+
+            if(!dateFormatResolver.appropriateFormat(date)){
+                return "redirect:/booking/view/error";
+            }
+
+        String formattedDate = date.substring(0, "2021 18 18".length()).replace(" ", "-");
+
+            int year =  Integer.parseInt(formattedDate.substring(0,4));
+
+        String minDate = year + "-01-01";
+        String maxDate = (year+1) + "-01-01";
+
+        model.addAttribute("currentDate" , formattedDate);
+        model.addAttribute("minDate", minDate);
+        model.addAttribute("maxDate", maxDate);
+        model.addAttribute("machineType", machineType);
+
+        return "booking/dateSelect";
     }
 
     @PostMapping("/add/{type}")

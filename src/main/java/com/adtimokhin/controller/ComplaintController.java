@@ -51,7 +51,7 @@ public class ComplaintController {
     public String addComplaintProcess(@RequestParam(name = "type") String type,
                                       @RequestParam(name = "id") String idString, Model model) {
 
-        int id = -1;
+        int id;
         try{
             id = Integer.parseInt(idString);
         }catch (Exception e){

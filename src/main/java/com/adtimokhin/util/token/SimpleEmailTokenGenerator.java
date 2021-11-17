@@ -87,10 +87,10 @@ public class SimpleEmailTokenGenerator implements TokenGenerator {
         return (char) symbols[random.nextInt(symbols.length - 1)];
     }
 
-    private String generateRest(int position) {
+    private String generateRest(int startPosition) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (int i = 0; i < TOKEN_LENGTH - position; i++) {
+        for (int i = 0; i < TOKEN_LENGTH - startPosition; i++) {
             stringBuilder.append(addRandomCharacter());
         }
 

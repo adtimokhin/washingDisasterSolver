@@ -230,4 +230,35 @@ public class DateFormatResolver {
 
         return true;
     }
+
+    public boolean isInAppropriateFormat(String date){
+        if(date.length() != "2021-01-01".length()){
+            return false;
+        }
+
+        String[] parts = date.split("-");
+
+        if(parts.length != 3){
+            return false;
+        }
+
+        for (int i = 0; i < parts.length; i++) {
+            try{
+                int integer = Integer.parseInt(parts[i]);
+                if(i == 0){
+                    if(integer < 2020 || integer > 3000) {
+                        return false;
+                    }
+                }else {
+                    if(integer < 0 || integer > 32){
+                        return false;
+                    }
+                }
+            }catch (Exception e){
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
